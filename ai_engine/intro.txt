@@ -1,0 +1,1 @@
+This folder is the backbone of project where all AI algorithm implementations are done .
