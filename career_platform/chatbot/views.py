@@ -107,7 +107,7 @@ except ImportError:
 class EnhancedCareerPalAI:
     def __init__(self):
         # Groq API configuration
-        self.groq_api_key = os.getenv('GROQ_API_KEY', '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')
+        self.groq_api_key = os.getenv('GROQ_API_KEY', "YOUR_GROQ_API_KEY")
         self.groq_url = "https://api.groq.com/openai/v1/chat/completions"
         
         # Initialize scraper
@@ -1816,4 +1816,5 @@ def check_dependencies(request):
         'dependencies': dependencies,
         'instructions': 'Install missing packages: pip install pypdf python-docx googletrans==4.0.0rc1',
         'success': True
+
     })
