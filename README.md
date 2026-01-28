@@ -1,0 +1,2 @@
+# Career_Connect
+This is a project which is executing to solve problems of freshers in their upskilling and right career path finding .We are also focusing to increase employability ,reduce poverty, human resourse optimization and increase in production for economical development.Our website traces student's performances and accordingly provides upskilling res
