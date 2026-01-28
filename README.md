@@ -19,28 +19,28 @@ AI chatbot for career guidance and FAQs
 Pasts section to explore world and share your expresses with world
 Further we are going add Agentic AI capabilities to website for more automation and productivity. Also, we will make our website multimodal and multilingual for more user-friendly applications.
 
-Feasibility
+Feasibility:
 Technical: Built with open-source tools (Django, Python,React).
 AI Feasibility: Uses K-Means, NLP, and recommendation models.
 Data: Kaggle-based student employability datasets.
 Integration: API-ready for LinkedIn/Coursera & BPUT database.
 User: Simple dashboards for students, colleges & companies.
 
-Viability
+Viability:
 Economic: Freemium/student subscription & institutional model.
 Social: Equal access to AI-driven guidance.
 Educational: Real-time skill gap tracking.
 Industrial: Companies get best-fit candidates.
 Sustainability: Cloud-ready, continuously learning models.
 
-Challenges & Risks
+Challenges & Risks:
 Limited availability of authentic student and job data.
 Possible AI bias in recommendations and shortlisting.
 Integration challenges across BPUT colleges and companies.
 Data privacy and user trust concerns.
 Low initial adoption among students or institutions.
 
-Strategies to Overcome
+Strategies to Overcome:
 Use open & synthetic datasets; continuous data cleaning and validation.
 Apply bias detection, explainable AI, and feedbackbased retraining.
 Use modular microservices & APIs for smooth integration.
@@ -48,19 +48,19 @@ Gamified learning, rewards, and competitions to boost engagement.
 Deploy on cloud for scalability and reliability.
 Simplified communication facilities between user and recruiters.
 
-IMPACT
+IMPACT:
 Real-time, data-driven job matching.
 Centralized employability ecosystem for BPUT.
 Supports Odisha’s “Digital & Skill Mission.”
 Improved placement ratios & industry alignment.
 
-BENEFITS
+BENEFITS:
 Personalized career guidance for every student.
 Recruiters get quality, AI-filtered candidates.
 University-level analytics on trends & skills.
 Increases confidence and employability readiness.
 
-FUTURE SCOPE
+FUTURE SCOPE:
 Short-Term:
 Improve AI accuracy, add mentor network, integrate job APIs.
 Long-Term:
