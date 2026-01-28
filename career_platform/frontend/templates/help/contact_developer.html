@@ -1,0 +1,158 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="cultural-card">
+                <div class="text-center mb-5">
+                    <h1 class="display-5 fw-bold mb-3">Contact Developer</h1>
+                    <p class="text-muted">Get in touch with our development team for support and feedback</p>
+                </div>
+
+                <form method="POST" class="needs-validation" novalidate>
+                    {% csrf_token %}
+                    
+                    <!-- Contact Method Selection -->
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <label class="form-label fw-bold">Preferred Contact Method</label>
+                            <div class="d-flex gap-3 flex-wrap">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="contact_method" 
+                                           id="emailMethod" value="email" checked>
+                                    <label class="form-check-label" for="emailMethod">
+                                        <i class="fas fa-envelope me-2"></i>Email
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="contact_method" 
+                                           id="whatsappMethod" value="whatsapp">
+                                    <label class="form-check-label" for="whatsappMethod">
+                                        <i class="fab fa-whatsapp me-2"></i>WhatsApp
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Form Fields -->
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="name" class="form-label">Your Name *</label>
+                            <input type="text" class="form-control" id="name" name="name" 
+                                   placeholder="Enter your name" required>
+                            <div class="invalid-feedback">
+                                Please provide your name.
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="email" class="form-label">Email Address *</label>
+                            <input type="email" class="form-control" id="email" name="email" 
+                                   placeholder="Enter your email" required>
+                            <div class="invalid-feedback">
+                                Please provide a valid email.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="subject" class="form-label">Subject *</label>
+                        <input type="text" class="form-control" id="subject" name="subject" 
+                               placeholder="Brief subject of your message" required>
+                        <div class="invalid-feedback">
+                            Please provide a subject.
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="message" class="form-label">Message *</label>
+                        <textarea class="form-control" id="message" name="message" 
+                                  rows="6" placeholder="Describe your issue or feedback in detail..." 
+                                  required></textarea>
+                        <div class="invalid-feedback">
+                            Please provide a message.
+                        </div>
+                    </div>
+
+                    <div class="d-flex gap-3 justify-content-between align-items-center flex-wrap">
+                        <button type="submit" class="btn btn-odisha">
+                            <i class="fas fa-paper-plane me-2"></i>Send Message
+                        </button>
+                        <a href="{% url 'help_page' %}" class="btn btn-outline-secondary">
+                            <i class="fas fa-arrow-left me-2"></i>Back to Help
+                        </a>
+                    </div>
+                </form>
+
+                <!-- Quick Contact Info -->
+                <div class="mt-5 pt-4 border-top">
+                    <h5 class="mb-3">Other Ways to Reach Us</h5>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-center mb-2">
+                                <i class="fas fa-envelope text-primary me-3"></i>
+                                <span>developer@bputcareer.com</span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-center mb-2">
+                                <i class="fab fa-whatsapp text-success me-3"></i>
+                                <span>+91 7978XXXXXX</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Form validation
+(function () {
+    'use strict'
+    var forms = document.querySelectorAll('.needs-validation')
+    Array.prototype.slice.call(forms).forEach(function (form) {
+        form.addEventListener('submit', function (event) {
+            if (!form.checkValidity()) {
+                event.preventDefault()
+                event.stopPropagation()
+            }
+            form.classList.add('was-validated')
+        }, false)
+    })
+})();
+
+// Update form based on contact method
+document.addEventListener('DOMContentLoaded', function() {
+    const emailMethod = document.getElementById('emailMethod');
+    const whatsappMethod = document.getElementById('whatsappMethod');
+    const submitButton = document.querySelector('button[type="submit"]');
+    
+    function updateSubmitButton() {
+        if (whatsappMethod.checked) {
+            submitButton.innerHTML = '<i class="fab fa-whatsapp me-2"></i>Continue to WhatsApp';
+            submitButton.classList.remove('btn-odisha');
+            submitButton.classList.add('btn-success');
+        } else {
+            submitButton.innerHTML = '<i class="fas fa-paper-plane me-2"></i>Send Message';
+            submitButton.classList.remove('btn-success');
+            submitButton.classList.add('btn-odisha');
+        }
+    }
+    
+    emailMethod.addEventListener('change', updateSubmitButton);
+    whatsappMethod.addEventListener('change', updateSubmitButton);
+    
+    // Check URL parameter for method
+    const urlParams = new URLSearchParams(window.location.search);
+    const method = urlParams.get('method');
+    if (method === 'whatsapp') {
+        whatsappMethod.checked = true;
+        updateSubmitButton();
+    }
+});
+</script>
+{% endblock %}
