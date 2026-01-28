@@ -1,0 +1,16 @@
+<!-- users/templates/users/debug.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>System Debug</title>
+</head>
+<body>
+    <h1>System Debug Information</h1>
+    <pre>{{ debug_info|pprint }}</pre>
+    <a href="{% url 'register' %}">Register</a> |
+    <a href="{% url 'login' %}">Login</a> |
+    <a href="{% url 'profile' %}">Profile</a> |
+    <a href="{% url 'dashboard' %}">Dashboard</a> |
+    <a href="{% url 'home' %}">Home</a>
+</body>
+</html>

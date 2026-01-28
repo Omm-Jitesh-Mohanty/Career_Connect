@@ -1,0 +1,14 @@
+<!-- users/templates/users/error.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Error</title>
+</head>
+<body>
+    <h1>Something went wrong</h1>
+    <p><strong>Error:</strong> {{ error }}</p>
+    <p>{{ message }}</p>
+    <a href="{% url 'home' %}">Go Home</a> |
+    <a href="{% url 'profile' %}">Try Profile Again</a>
+</body>
+</html>
