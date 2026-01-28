@@ -1,0 +1,1 @@
+This folder contains all the html code for social media posting feed page.
