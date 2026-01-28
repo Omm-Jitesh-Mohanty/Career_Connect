@@ -1,1 +1,0 @@
-This folder contains all the html codes for helpdesk page.
