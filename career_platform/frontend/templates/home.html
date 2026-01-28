@@ -1,0 +1,971 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<!-- FIX FOR ALL BUTTONS IN HOME PAGE -->
+<style>
+    /* FIX ALL BUTTONS IN HOME PAGE */
+    #action-buttons .btn,
+    .odisha-cta .btn {
+        //all: unset !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        font-weight: 600 !important;
+        text-decoration: none !important;
+        cursor: pointer !important;
+        border-radius: 25px !important;
+        padding: 12px 30px !important;
+        transition: all 0.3s ease !important;
+        margin: 5px !important;
+
+        border: none !important;
+        white-space: nowrap !important;
+    }
+
+    /* ODISHA BUTTON STYLES */
+    #action-buttons .btn-odisha,
+    .odisha-cta .btn-odisha {
+        background: linear-gradient(135deg, #FF9933, #138808) !important;
+        color: white !important;
+        border: none !important;
+    }
+
+    /* OUTLINE LIGHT BUTTON STYLES */
+    #action-buttons .btn-outline-light {
+        background: transparent !important;
+        color: #f8f9fa !important;
+        border: 2px solid #f8f9fa !important;
+    }
+
+    /* WARNING BUTTON STYLES */
+    #action-buttons .btn-warning,
+    .odisha-cta .btn-warning {
+        background: #ffc107 !important;
+        color: #000 !important;
+        border: none !important;
+    }
+
+    /* HOVER EFFECTS FOR ALL BUTTONS */
+    #action-buttons .btn:hover,
+    .odisha-cta .btn:hover {
+        transform: translateY(-2px) !important;
+        text-decoration: none !important;
+
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2) !important;
+    }
+
+    #action-buttons .btn-odisha:hover,
+    .odisha-cta .btn-odisha:hover {
+        box-shadow: 0 10px 20px rgba(255, 153, 51, 0.3) !important;
+        color: white !important;
+    }
+
+    #action-buttons .btn-outline-light:hover {
+        background: rgba(248, 249, 250, 0.1) !important;
+        color: #f8f9fa !important;
+
+        border-color: #f8f9fa !important;
+    }
+
+    #action-buttons .btn-warning:hover,
+    .odisha-cta .btn-warning:hover {
+        box-shadow: 0 10px 20px rgba(255, 193, 7, 0.3) !important;
+        color: #000 !important;
+    }
+
+    /* RESPONSIVE FIXES */
+    @media (max-width: 768px) {
+        #action-buttons .btn,
+        .odisha-cta .btn {
+            width: 100% !important;
+            margin-bottom: 10px !important;
+
+            display: block !important;
+        }
+        #action-buttons,
+        .odisha-cta .d-flex {
+            flex-direction: column !important;
+        }
+    }
+</style>
+
+<!-- YOUR EXISTING HOME CONTENT - COMPLETELY UNCHANGED -->
+<section class="hero-section odisha-hero">
+    <div class="container">
+        <div class="row align-items-center min-vh-80">
+            <div class="col-lg-6">
+                <!-- Odisha Cultural Header -->
+                <div class="odisha-header mb-4">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="odisha-flag me-3">
+                            <div class="flag-circle"></div>
+                        </div>
+                        <h1 class="display-4 fw-bold text-white mb-0">
+                            BPUT Career Connect
+                        </h1>
+                    </div>
+                    <h2 class="text-warning fw-bold mb-3">
+                        <i class="fas fa-university me-2"></i>Odisha's Premier Career Platform
+                    </h2>
+                </div>
+                
+                <p class="lead mb-4 text-light fs-5">
+                    Biju Patnaik University of Technology's AI-powered career platform. 
+                    Get personalized career guidance, skill development paths, and connect with top recruiters across Odisha and India.
+                </p>
+                
+                <!-- BPUT Trust Metrics -->
+                <div class="row mb-4">
+                    <div class="col-6 col-md-3">
+                        <div class="text-center">
+                            <h3 class="text-warning fw-bold mb-1">50K+</h3>
+                            <small class="text-light">BPUT Students</small>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="text-center">
+                            <h3 class="text-warning fw-bold mb-1">300+</h3>
+                            <small class="text-light">Partner Companies</small>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="text-center">
+                            <h3 class="text-warning fw-bold mb-1">87%</h3>
+                            <small class="text-light">Placement Rate</small>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="text-center">
+                            <h3 class="text-warning fw-bold mb-1">₹5.8L</h3>
+                            <small class="text-light">Avg Package</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons - NOW FIXED -->
+                <div class="d-flex flex-wrap gap-3" id="action-buttons">
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'dashboard' %}" class="btn btn-odisha btn-lg px-4 py-3 fw-semibold action-btn">
+                            <i class="fas fa-tachometer-alt me-2"></i>Go to Dashboard
+                        </a>
+                        <a href="{% url 'career_recommendations' %}" class="btn btn-outline-light btn-lg px-4 py-3 fw-semibold action-btn">
+                            <i class="fas fa-briefcase me-2"></i>Find Opportunities
+                        </a>
+                        <a href="{% url 'posts_feed' %}" class="btn btn-warning btn-lg px-4 py-3 fw-semibold action-btn">
+                            <i class="fas fa-comments me-2"></i>Join Community
+                        </a>
+                    {% else %}
+                        <a href="{% url 'register' %}" class="btn btn-odisha btn-lg px-4 py-3 fw-semibold action-btn">
+                            <i class="fas fa-rocket me-2"></i>Start Your Journey
+                        </a>
+                        <a href="{% url 'login' %}" class="btn btn-outline-light btn-lg px-4 py-3 fw-semibold action-btn">
+                            <i class="fas fa-sign-in-alt me-2"></i>Student Login
+                        </a>
+                    {% endif %}
+                </div>
+
+                <!-- Quick Stats -->
+                <div class="mt-4">
+                    <div class="d-flex flex-wrap gap-3">
+                        <span class="badge bg-success">
+                            <i class="fas fa-check me-1"></i>AI-Powered
+                        </span>
+                        <span class="badge bg-info">
+                            <i class="fas fa-brain me-1"></i>Machine Learning
+                        </span>
+                        <span class="badge bg-warning text-dark">
+                            <i class="fas fa-graduation-cap me-1"></i>BPUT Approved
+                        </span>
+                        <span class="badge bg-primary">
+                            <i class="fas fa-language me-1"></i>Odia Support
+                        </span>
+                        <span class="badge bg-pink">
+                            <i class="fas fa-users me-1"></i>Live Community
+                        </span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-6">
+                <!-- Odisha-themed Hero Illustration -->
+                <div class="odisha-hero-illustration">
+                    <div class="cultural-element konark-wheel">
+                        <i class="fas fa-cog fa-3x text-warning"></i>
+                    </div>
+                    <div class="cultural-element palm-tree">
+                        <i class="fas fa-tree fa-2x text-success"></i>
+                    </div>
+                    
+                    <!-- Floating Career Cards -->
+                    <div class="floating-card card-1">
+                        <i class="fas fa-laptop-code fa-2x text-primary"></i>
+                        <span>Tech Jobs</span>
+                        <small>Odisha & India</small>
+                    </div>
+                    <div class="floating-card card-2">
+                        <i class="fas fa-chart-line fa-2x text-success"></i>
+                        <span>Career Growth</span>
+                        <small>AI Guided</small>
+                    </div>
+                    <div class="floating-card card-3">
+                        <i class="fas fa-graduation-cap fa-2x text-warning"></i>
+                        <span>Skill Development</span>
+                        <small>BPUT Focused</small>
+                    </div>
+                    
+                    <div class="floating-card card-4">
+                        <i class="fas fa-comments fa-2x text-pink"></i>
+                        <span>Community</span>
+                        <small>Connect & Share</small>
+                    </div>
+                    
+                    <!-- Main Center Card -->
+                    <div class="main-cultural-card">
+                        <div class="odisha-pattern"></div>
+                        <h4>Your Career Success</h4>
+                        <p>Powered by AI</p>
+                        <div class="progress mt-2">
+                            <div class="progress-bar bg-success" style="width: 85%">85% Match Accuracy</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Featured Odisha Companies Section -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="display-5 fw-bold mb-3 text-odisha">Trusted by Leading Companies</h2>
+            <p class="lead text-muted">Our BPUT students get placed in top organizations across Odisha and India</p>
+        </div>
+        
+        <div class="row align-items-center justify-content-center g-4">
+            <!-- Odisha-based Companies -->
+            <div class="col-6 col-md-3 col-lg-2 text-center">
+                <div class="company-logo odisha-company">
+                    <div class="logo-placeholder bg-odisha text-white rounded p-3">
+                        <h6 class="mb-0">OMC</h6>
+                        <small>Odisha Mining</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-md-3 col-lg-2 text-center">
+                <div class="company-logo odisha-company">
+                    <div class="logo-placeholder bg-success text-white rounded p-3">
+                        <h6 class="mb-0">GRIDCO</h6>
+                        <small>Energy</small>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- National Companies -->
+            <div class="col-6 col-md-3 col-lg-2 text-center">
+                <div class="company-logo">
+                    <div class="logo-placeholder bg-primary text-white rounded p-3">
+                        <h6 class="mb-0">TCS</h6>
+                        <small>IT Services</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-md-3 col-lg-2 text-center">
+                <div class="company-logo">
+                    <div class="logo-placeholder bg-info text-white rounded p-3">
+                        <h6 class="mb-0">Infosys</h6>
+                        <small>Technology</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-md-3 col-lg-2 text-center">
+                <div class="company-logo">
+                    <div class="logo-placeholder bg-warning text-dark rounded p-3">
+                        <h6 class="mb-0">Wipro</h6>
+                        <small>IT Services</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-md-3 col-lg-2 text-center">
+                <div class="company-logo">
+                    <div class="logo-placeholder bg-dark text-white rounded p-3">
+                        <h6 class="mb-0">Tech M</h6>
+                        <small>Consulting</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- How It Works - BPUT Focused -->
+<section class="py-5 bg-white">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="display-5 fw-bold mb-3 text-odisha">How BPUT Career Connect Works</h2>
+            <p class="lead text-muted">Your 4-step journey to career success with AI guidance</p>
+        </div>
+        
+        <div class="row align-items-center">
+            <div class="col-lg-6 mb-4">
+                <div class="bput-process-image">
+                    <div class="process-illustration">
+                        <div class="step-indicator active">1</div>
+                        <div class="step-indicator">2</div>
+                        <div class="step-indicator">3</div>
+                        <div class="step-indicator">4</div>
+                        <div class="process-line"></div>
+                    </div>
+                    <div class="text-center mt-4">
+                        <h5 class="text-odisha">AI-Powered Career Path</h5>
+                        <p class="text-muted">From profile to placement</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-6">
+                <div class="step-card odisha-step">
+                    <div class="step-number odisha-bg">1</div>
+                    <div class="step-content">
+                        <h4 class="text-odisha">Create Your Digital Profile</h4>
+                        <p>Build your comprehensive BPUT student profile with academic records, skills, projects, and career interests. Our AI analyzes your unique strengths.</p>
+                        <small class="text-muted"><i class="fas fa-robot me-1"></i>AI Profile Analysis</small>
+                    </div>
+                </div>
+                
+                <div class="step-card odisha-step">
+                    <div class="step-number odisha-bg">2</div>
+                    <div class="step-content">
+                        <h4 class="text-odisha">Get AI Recommendations</h4>
+                        <p>Receive personalized career and internship matches using advanced machine learning algorithms tailored for BPUT students.</p>
+                        <small class="text-muted"><i class="fas fa-brain me-1"></i>ML-Powered Matching</small>
+                    </div>
+                </div>
+                
+                <div class="step-card odisha-step">
+                    <div class="step-number odisha-bg">3</div>
+                    <div class="step-content">
+                        <h4 class="text-odisha">Skill Gap Analysis</h4>
+                        <p>Identify skill gaps and get personalized learning paths with Odisha-industry relevant curriculum and project-based learning.</p>
+                        <small class="text-muted"><i class="fas fa-chart-line me-1"></i>Market Demand Analysis</small>
+                    </div>
+                </div>
+                
+                <div class="step-card odisha-step">
+                    <div class="step-number odisha-bg">4</div>
+                    <div class="step-content">
+                        <h4 class="text-odisha">Get Placed & Grow</h4>
+                        <p>Apply to matched opportunities, track applications, and receive Odisha-industry specific interview preparation and guidance.</p>
+                        <small class="text-muted"><i class="fas fa-briefcase me-1"></i>Career Launch</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- AI Features with Odisha Theme -->
+<section class="py-5 bg-odisha-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="display-5 fw-bold mb-3 text-odisha">AI-Powered Features for BPUT Students</h2>
+            <p class="lead text-muted">Advanced technology customized for Odisha's engineering talent</p>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-4">
+                <div class="feature-card odisha-feature">
+                    <div class="feature-icon odisha-bg">
+                        <i class="fas fa-robot fa-3x"></i>
+                    </div>
+                    <h4 class="text-odisha">Smart Career Matching</h4>
+                    <p>AI algorithms match you with perfect opportunities based on your skills, branch, and career goals.</p>
+                    <ul class="odisha-list">
+                        <li><i class="fas fa-check text-success me-2"></i>Skill-based matching</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Branch-specific opportunities</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Personalized recommendations</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-4">
+                <div class="feature-card odisha-feature">
+                    <div class="feature-icon odisha-bg">
+                        <i class="fas fa-chart-bar fa-3x"></i>
+                    </div>
+                    <h4 class="text-odisha">Real-time Skill Analytics</h4>
+                    <p>Comprehensive analysis of your skills and identification of Odisha market demand gaps.</p>
+                    <ul class="odisha-list">
+                        <li><i class="fas fa-check text-success me-2"></i>Odisha industry trends</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Skill gap analysis</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Progress tracking</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-4">
+                <div class="feature-card odisha-feature">
+                    <div class="feature-icon odisha-bg">
+                        <i class="fas fa-road fa-3x"></i>
+                    </div>
+                    <h4 class="text-odisha">Personalized Learning</h4>
+                    <p>Custom learning journeys with Odisha-relevant projects and industry curriculum.</p>
+                    <ul class="odisha-list">
+                        <li><i class="fas fa-check text-success me-2"></i>BPUT curriculum aligned</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Project-based learning</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Industry certifications</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <div class="feature-card odisha-feature">
+                    <div class="feature-icon odisha-bg">
+                        <i class="fas fa-comments fa-3x"></i>
+                    </div>
+                    <h4 class="text-odisha">Community Hub</h4>
+                    <p>Connect with fellow BPUT students, share experiences, and grow together in our vibrant community.</p>
+                    <ul class="odisha-list">
+                        <li><i class="fas fa-check text-success me-2"></i>Share posts & achievements</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Like & comment on posts</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Network with peers</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <div class="feature-card odisha-feature">
+                    <div class="feature-icon odisha-bg">
+                        <i class="fas fa-chart-pie fa-3x"></i>
+                    </div>
+                    <h4 class="text-odisha">Interactive Analytics</h4>
+                    <p>Visualize your career progress with beautiful charts and data-driven insights.</p>
+                    <ul class="odisha-list">
+                        <li><i class="fas fa-check text-success me-2"></i>Career fit analysis</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Skill distribution charts</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Market demand insights</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <div class="feature-card odisha-feature">
+                    <div class="feature-icon odisha-bg">
+                        <i class="fas fa-briefcase fa-3x"></i>
+                    </div>
+                    <h4 class="text-odisha">Smart Internships</h4>
+                    <p>Find the perfect internships with AI-powered matching and real-time opportunity tracking.</p>
+                    <ul class="odisha-list">
+                        <li><i class="fas fa-check text-success me-2"></i>AI-powered matching</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Real-time opportunities</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Odisha company focus</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- BPUT Success Stories -->
+<section class="py-5 bg-odisha text-white">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="display-5 fw-bold mb-3">BPUT Student Success Stories</h2>
+            <p class="lead">Hear from our students who transformed their careers with AI guidance</p>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="testimonial-card odisha-testimonial">
+                    <div class="student-avatar odisha-avatar">
+                        <i class="fas fa-user-graduate fa-2x"></i>
+                    </div>
+                    <h5>Priya Sharma</h5>
+                    <p class="text-light">CSE, CET Bhubaneswar</p>
+                    <p>"The AI recommendations helped me discover data science. Got placed at TCS with 6.5 LPA while staying in Odisha!"</p>
+                    <div class="placement-badge odisha-badge">Placed at TCS</div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="testimonial-card odisha-testimonial">
+                    <div class="student-avatar odisha-avatar">
+                        <i class="fas fa-user-graduate fa-2x"></i>
+                    </div>
+                    <h5>Rajesh Kumar</h5>
+                    <p class="text-light">IT, GITA Bhubaneswar</p>
+                    <p>"Skill gap analysis showed exactly what Odisha companies need. Landed my dream job at Infosys Bhubaneswar!"</p>
+                    <div class="placement-badge odisha-badge">Placed at Infosys</div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="testimonial-card odisha-testimonial">
+                    <div class="student-avatar odisha-avatar">
+                        <i class="fas fa-user-graduate fa-2x"></i>
+                    </div>
+                    <h5>Anjali Patel</h5>
+                    <p class="text-light">ECE, TECHNO Bhubaneswar</p>
+                    <p>"As an ECE student from BPUT, I transitioned to software development with platform's Odisha-specific guidance!"</p>
+                    <div class="placement-badge odisha-badge">Placed at Wipro</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- Help & Support Section - NEW ADDITION -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="display-5 fw-bold mb-3 text-odisha">Need Help? We're Here For You!</h2>
+            <p class="lead text-muted">24/7 support for all BPUT students</p>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="cultural-card text-center h-100">
+                    <div class="feature-icon mb-3">
+                        <i class="fas fa-question-circle"></i>
+                    </div>
+                    <h4 class="text-odisha">Help Center</h4>
+                    <p class="text-muted">Find answers to common questions, tutorials, and guides</p>
+                    <a href="{% url 'help_page' %}" class="btn btn-outline-primary mt-2">
+                        <i class="fas fa-life-ring me-2"></i>Visit Help Center
+                    </a>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="cultural-card text-center h-100">
+                    <div class="feature-icon mb-3">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <h4 class="text-odisha">Contact Developer</h4>
+                    <p class="text-muted">Get personalized help from our development team</p>
+                    <a href="{% url 'contact_developer' %}" class="btn btn-outline-success mt-2">
+                        <i class="fas fa-envelope me-2"></i>Send Message
+                    </a>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="cultural-card text-center h-100">
+                    <div class="feature-icon mb-3">
+                        <i class="fab fa-whatsapp"></i>
+                    </div>
+                    <h4 class="text-odisha">WhatsApp Support</h4>
+                    <p class="text-muted">Instant chat support for quick questions</p>
+                    <a href="{% url 'contact_developer' %}" class="btn btn-outline-success mt-2" style="background: #25D366; color: white;">
+                        <i class="fab fa-whatsapp me-2"></i>Chat Now
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="text-center mt-5">
+            <div class="alert alert-info cultural-card">
+                <h5><i class="fas fa-robot me-2"></i>Try Our AI Assistant!</h5>
+                <p class="mb-2">Get instant help with career questions, resume reviews, and interview preparation</p>
+                <a href="{% url 'ai_agent' %}" class="btn btn-odisha">
+                    <i class="fas fa-robot me-2"></i>Chat with CareerPal AI
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- Final CTA with Odisha Theme - BOTTOM BUTTONS NOW FIXED -->
+<section class="py-5 bg-dark text-white">
+    <div class="container text-center">
+        <div class="odisha-cta">
+            <h2 class="display-6 fw-bold mb-3">Ready to Launch Your Career?</h2>
+            <p class="lead mb-4">Join thousands of BPUT students building successful careers with AI-powered guidance</p>
+            
+            {% if not user.is_authenticated %}
+            <a href="{% url 'register' %}" class="btn btn-odisha btn-lg px-5 py-3 fw-bold action-btn">
+                <i class="fas fa-rocket me-2"></i>Start Your BPUT Journey
+            </a>
+            {% else %}
+            <div class="d-flex justify-content-center gap-3 flex-wrap">
+                <a href="{% url 'career_recommendations' %}" class="btn btn-odisha btn-lg px-5 py-3 fw-bold action-btn">
+                    <i class="fas fa-briefcase me-2"></i>Explore Opportunities
+                </a>
+                <a href="{% url 'posts_feed' %}" class="btn btn-warning btn-lg px-5 py-3 fw-bold action-btn">
+                    <i class="fas fa-comments me-2"></i>Join Community
+                </a>
+            </div>
+            {% endif %}
+            
+            <div class="mt-4">
+                <p class="text-light mb-2">
+                    <i class="fas fa-university me-2"></i>Official Career Platform for BPUT Students
+                </p>
+                <p class="text-warning">
+                    <i class="fas fa-language me-2"></i>Odia and English Language Support
+                </p>
+            </div>
+            <div class="mt-3">
+                <small class="text-light">
+                    <i class="fas fa-question-circle me-1"></i>
+                    Need help? Visit our 
+                    <a href="{% url 'help_page' %}" class="text-warning">Help Center</a> or 
+                    <a href="{% url 'ai_agent' %}" class="text-warning">AI Assistant</a>
+                </small>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- YOUR EXISTING STYLES - COMPLETELY UNCHANGED -->
+<style>
+/* Odisha Theme Colors */
+:root {
+    --odisha-orange: #FF9933;
+    --odisha-green: #138808;
+    --odisha-white: #FFFFFF;
+    --odisha-dark: #8B4513;
+    --odisha-gold: #FFD700;
+    --pink: #E01171;
+}
+
+/* Odisha Hero Section */
+.odisha-hero {
+    background: linear-gradient(135deg, var(--odisha-dark) 0%, #2c5530 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+.odisha-hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23ffffff' fill-opacity='0.05' fill-rule='evenodd'/%3E%3C/svg%3E");
+}
+
+.odisha-header h2 {
+    font-family: 'Arial', sans-serif;
+    font-size: 1.5rem;
+}
+
+.odisha-flag {
+    position: relative;
+}
+
+.flag-circle {
+    width: 60px;
+    height: 60px;
+    background: conic-gradient(
+        var(--odisha-orange) 0deg 120deg,
+        var(--odisha-white) 120deg 240deg,
+        var(--odisha-green) 240deg 360deg
+    );
+    border-radius: 50%;
+    border: 3px solid var(--odisha-gold);
+}
+
+/* Odisha Hero Illustration */
+.odisha-hero-illustration {
+    position: relative;
+    height: 400px;
+}
+
+.cultural-element {
+    position: absolute;
+    animation: float 8s ease-in-out infinite;
+}
+
+.konark-wheel {
+    top: 20px;
+    right: 50px;
+    animation-delay: 0s;
+}
+
+.palm-tree {
+    bottom: 30px;
+    left: 30px;
+    animation-delay: 2s;
+}
+
+.floating-card {
+    position: absolute;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 15px;
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    font-weight: 600;
+    color: #333;
+    animation: float 6s ease-in-out infinite;
+    border-left: 4px solid var(--odisha-orange);
+}
+
+.floating-card small {
+    font-size: 0.7rem;
+    color: #666;
+}
+
+.card-1 {
+    top: 50px;
+    left: 20px;
+    animation-delay: 0s;
+    border-left-color: var(--primary);
+}
+
+.card-2 {
+    top: 150px;
+    right: 10px;
+    animation-delay: 1.5s;
+    border-left-color: var(--success);
+}
+
+.card-3 {
+    bottom: 5px;
+    left: 100px;
+    animation-delay: 3s;
+    border-left-color: var(--warning);
+}
+
+.card-4 {
+    top: 300px;
+    right: 100px;
+    animation-delay: 4.5s;
+    border-left-color: var(--pink);
+}
+
+.main-cultural-card {
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: linear-gradient(135deg, var(--odisha-orange), var(--odisha-green));
+    color: white;
+    padding: 30px;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    border: 3px solid var(--odisha-gold);
+    min-width: 200px;
+}
+
+.odisha-pattern {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    opacity: 0.1;
+    background: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='1' fill-rule='evenodd'%3E%3Cpath d='M0 40L40 0H20L0 20M40 40V20L20 40'/%3E%3C/g%3E%3C/svg%3E");
+    border-radius: 20px;
+}
+
+/* Odisha Colors */
+.text-odisha {
+    color: var(--odisha-orange) !important;
+}
+
+.bg-odisha {
+    background: linear-gradient(135deg, var(--odisha-orange), var(--odisha-green)) !important;
+}
+
+.bg-odisha-light {
+    background: linear-gradient(135deg, #fff8f0, #f0fff0) !important;
+}
+
+.btn-odisha {
+    background: linear-gradient(135deg, var(--odisha-orange), var(--odisha-green));
+    color: white;
+    border: none;
+    border-radius: 25px;
+    padding: 12px 30px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-odisha:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(255, 153, 51, 0.3);
+    color: white;
+}
+
+/* Pink badge for community */
+.bg-pink {
+    background-color: var(--pink) !important;
+}
+
+/* Action Button Fixes */
+.action-btn {
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.action-btn:hover {
+    text-decoration: none;
+}
+
+/* Odisha Company Logos */
+.odisha-company .logo-placeholder {
+    border: 2px solid var(--odisha-orange);
+}
+
+/* Step Cards */
+.odisha-step {
+    border-left: 4px solid var(--odisha-orange);
+}
+
+.odisha-step .step-number {
+    background: linear-gradient(135deg, var(--odisha-orange), var(--odisha-green));
+    color: white;
+}
+
+/* Feature Cards */
+.odisha-feature {
+    border-top: 4px solid var(--odisha-orange);
+}
+
+.odisha-feature .feature-icon {
+    background: linear-gradient(135deg, var(--odisha-orange), var(--odisha-green));
+}
+
+.odisha-list {
+    list-style: none;
+    padding: 0;
+}
+
+.odisha-list li {
+    padding: 5px 0;
+}
+
+/* Testimonials */
+.odisha-testimonial {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.odisha-avatar {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.odisha-badge {
+    background: var(--odisha-gold);
+    color: #000;
+}
+
+/* Process Illustration */
+.bput-process-image {
+    text-align: center;
+}
+
+.process-illustration {
+    position: relative;
+    height: 100px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 50px;
+}
+
+.step-indicator {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #e9ecef;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    z-index: 2;
+    border: 3px solid #fff;
+}
+
+.step-indicator.active {
+    background: linear-gradient(135deg, var(--odisha-orange), var(--odisha-green));
+    color: white;
+}
+
+.process-line {
+    position: absolute;
+    top: 50%;
+    left: 70px;
+    right: 70px;
+    height: 3px;
+    background: linear-gradient(90deg, var(--odisha-orange), var(--odisha-green));
+    z-index: 1;
+}
+
+/* Animations */
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-20px); }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .odisha-hero-illustration {
+        height: 300px;
+        margin-top: 40px;
+    }
+    
+    .floating-card {
+        padding: 10px;
+        font-size: 0.8rem;
+    }
+    
+    .main-cultural-card {
+        padding: 20px;
+        min-width: 150px;
+    }
+    
+    .odisha-header h2 {
+        font-size: 1.1rem;
+    }
+    
+    .action-btn {
+        width: 100%;
+        text-align: center;
+    }
+}
+
+/* Add to your existing CSS - Help Section Specific */
+.btn-outline-success[style*="background: #25D366"] {
+    background: #25D366 !important;
+    color: white !important;
+    border: none !important;
+}
+
+.btn-outline-success[style*="background: #25D366"]:hover {
+    background: #128C7E !important;
+    color: white !important;
+}
+
+</style>
+
+<script>
+// Additional JavaScript to ensure buttons work
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('BPUT Career Connect - Home Page Loaded');
+    
+    // Add click event listeners to all action buttons
+    const actionButtons = document.querySelectorAll('.action-btn');
+    actionButtons.forEach(button => {
+        button.addEventListener('click', function(e) {
+            console.log('Button clicked:', this.href);
+            // Let the natural link behavior happen
+        });
+    });
+    
+    // Debug: Check if user is authenticated
+    console.log('User authenticated:', {{ user.is_authenticated|yesno:"true,false" }});
+});
+</script>
+{% endblock %}

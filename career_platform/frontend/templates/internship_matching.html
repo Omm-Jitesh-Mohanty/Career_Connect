@@ -1,0 +1,366 @@
+<!-- frontend/templates/internship_matching.html -->
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="cultural-card p-4">
+                <h2 class="text-center mb-3">Internship Matching</h2>
+                <p class="text-center text-muted mb-0">
+                    Discover personalized internship opportunities from top platforms
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="cultural-card p-4">
+                <h5 class="mb-3"><i class="fas fa-filter me-2 text-primary"></i>Filter Opportunities</h5>
+                <div class="row g-3">
+                    <div class="col-md-3">
+                        <label class="form-label">Platform</label>
+                        <select class="form-select" id="platformFilter">
+                            <option value="">All Platforms</option>
+                            <option value="internshala">Internshala</option>
+                            <option value="naukri">Naukri</option>
+                            <option value="linkedin">LinkedIn</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Location</label>
+                        <select class="form-select" id="locationFilter">
+                            <option value="">All Locations</option>
+                            <option value="remote">Remote</option>
+                            <option value="bangalore">Bangalore</option>
+                            <option value="hyderabad">Hyderabad</option>
+                            <option value="pune">Pune</option>
+                            <option value="chennai">Chennai</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Duration</label>
+                        <select class="form-select" id="durationFilter">
+                            <option value="">Any Duration</option>
+                            <option value="1">1 month</option>
+                            <option value="2">2 months</option>
+                            <option value="3">3 months</option>
+                            <option value="6">6 months</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Category</label>
+                        <select class="form-select" id="categoryFilter">
+                            <option value="">All Categories</option>
+                            <option value="software">Software Engineering</option>
+                            <option value="data">Data Science</option>
+                            <option value="web">Web Development</option>
+                            <option value="cloud">Cloud Computing</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Internships Grid -->
+    <div class="row">
+        <div class="col-12">
+            <div class="cultural-card p-4">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h4 class="mb-0">
+                        <i class="fas fa-briefcase me-2 text-primary"></i>
+                        Available Internships
+                    </h4>
+                    <span class="badge bg-primary" id="internshipCount">Loading...</span>
+                </div>
+
+                <div id="internshipsContainer" class="row">
+                    <!-- Internships will be loaded here -->
+                    <div class="col-12 text-center py-5">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <p class="mt-3 text-muted">Loading internship opportunities...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Toast Container -->
+<div id="toastContainer" class="toast-container position-fixed top-0 end-0 p-3"></div>
+
+<style>
+.internship-card {
+    transition: all 0.3s ease;
+    border: 1px solid #e0e0e0;
+}
+
+.internship-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+}
+
+.platform-badge {
+    font-size: 0.7rem;
+}
+
+.featured-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+.stipend-high {
+    color: #198754;
+    font-weight: bold;
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    loadInternships();
+    
+    // Add event listeners to filters
+    document.getElementById('platformFilter').addEventListener('change', filterInternships);
+    document.getElementById('locationFilter').addEventListener('change', filterInternships);
+    document.getElementById('durationFilter').addEventListener('change', filterInternships);
+    document.getElementById('categoryFilter').addEventListener('change', filterInternships);
+});
+
+async function loadInternships() {
+    try {
+        const response = await fetch('/ai-engine/internship-matching-api/');
+        const data = await response.json();
+        
+        if (data.success) {
+            displayInternships(data.internships);
+        } else {
+            showNotification('Failed to load internships: ' + data.error, 'error');
+        }
+    } catch (error) {
+        console.error('Error loading internships:', error);
+        showNotification('Error loading internships. Please try again.', 'error');
+    }
+}
+
+function displayInternships(internshipsData) {
+    const container = document.getElementById('internshipsContainer');
+    const countElement = document.getElementById('internshipCount');
+    
+    if (!internshipsData.personalized || internshipsData.personalized.length === 0) {
+        container.innerHTML = `
+            <div class="col-12 text-center py-5">
+                <i class="fas fa-search fa-3x text-muted mb-3"></i>
+                <h5>No internships found</h5>
+                <p class="text-muted">Try adjusting your filters or check back later for new opportunities.</p>
+            </div>
+        `;
+        countElement.textContent = '0 internships';
+        return;
+    }
+    
+    const allInternships = [...internshipsData.personalized, ...(internshipsData.featured || [])];
+    countElement.textContent = `${allInternships.length} internships`;
+    
+    let internshipsHTML = '';
+    
+    allInternships.forEach(internship => {
+        internshipsHTML += `
+            <div class="col-md-6 col-lg-4 mb-4 internship-item" 
+                 data-platform="${internship.platform}"
+                 data-location="${internship.location.toLowerCase()}"
+                 data-duration="${internship.duration}"
+                 data-category="${internship.category.toLowerCase()}">
+                <div class="card h-100 internship-card position-relative">
+                    ${internship.is_featured ? `
+                    <span class="featured-badge badge bg-warning text-dark">
+                        <i class="fas fa-star me-1"></i>Featured
+                    </span>
+                    ` : ''}
+                    
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <h6 class="card-title mb-0">${internship.title}</h6>
+                            <span class="badge platform-badge bg-secondary">${internship.platform}</span>
+                        </div>
+                        
+                        <h6 class="card-subtitle mb-2 text-primary">${internship.company}</h6>
+                        
+                        <div class="internship-details">
+                            <p class="small mb-1">
+                                <i class="fas fa-map-marker-alt me-1 text-muted"></i>
+                                ${internship.location}
+                            </p>
+                            <p class="small mb-1">
+                                <i class="fas fa-clock me-1 text-muted"></i>
+                                ${internship.duration}
+                            </p>
+                            <p class="small mb-2 ${internship.stipend.includes('80,000') || internship.stipend.includes('75,000') ? 'stipend-high' : ''}">
+                                <i class="fas fa-money-bill-wave me-1 text-muted"></i>
+                                ${internship.stipend}
+                            </p>
+                        </div>
+                        
+                        <div class="skills-section mb-3">
+                            <small class="text-muted">Skills:</small>
+                            <div class="mt-1">
+                                ${internship.skills_required.split(', ').slice(0, 3).map(skill => 
+                                    `<span class="badge bg-light text-dark me-1 mb-1 small">${skill}</span>`
+                                ).join('')}
+                            </div>
+                        </div>
+                        
+                        <div class="d-flex justify-content-between align-items-center">
+                            <small class="text-muted">
+                                <i class="fas fa-calendar me-1"></i>
+                                Apply by ${internship.apply_by}
+                            </small>
+                            ${internship.match_score ? `
+                            <span class="badge bg-success">${internship.match_score}% Match</span>
+                            ` : ''}
+                        </div>
+                    </div>
+                    
+                    <div class="card-footer bg-transparent">
+                        <div class="d-grid gap-2">
+                            <a href="${internship.url}" target="_blank" class="btn btn-primary btn-sm">
+                                <i class="fas fa-external-link-alt me-1"></i>Apply Now
+                            </a>
+                            <button class="btn btn-outline-primary btn-sm save-internship-btn" 
+                                    data-internship='${JSON.stringify(internship)}'>
+                                <i class="fas fa-bookmark me-1"></i>Save
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+    });
+    
+    container.innerHTML = internshipsHTML;
+    
+    // Add event listeners to save buttons
+    document.querySelectorAll('.save-internship-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            const internshipData = JSON.parse(this.dataset.internship);
+            saveInternship(internshipData, this);
+        });
+    });
+}
+
+function filterInternships() {
+    const platformFilter = document.getElementById('platformFilter').value;
+    const locationFilter = document.getElementById('locationFilter').value;
+    const durationFilter = document.getElementById('durationFilter').value;
+    const categoryFilter = document.getElementById('categoryFilter').value;
+    
+    const internshipItems = document.querySelectorAll('.internship-item');
+    let visibleCount = 0;
+    
+    internshipItems.forEach(item => {
+        const platform = item.dataset.platform;
+        const location = item.dataset.location;
+        const duration = item.dataset.duration;
+        const category = item.dataset.category;
+        
+        const platformMatch = !platformFilter || platform === platformFilter;
+        const locationMatch = !locationFilter || location.includes(locationFilter);
+        const durationMatch = !durationFilter || duration.includes(durationFilter);
+        const categoryMatch = !categoryFilter || category.includes(categoryFilter);
+        
+        if (platformMatch && locationMatch && durationMatch && categoryMatch) {
+            item.style.display = 'block';
+            visibleCount++;
+        } else {
+            item.style.display = 'none';
+        }
+    });
+    
+    document.getElementById('internshipCount').textContent = `${visibleCount} internships`;
+}
+
+async function saveInternship(internshipData, buttonElement) {
+    try {
+        const response = await fetch('/ai-engine/save-opportunity/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCSRFToken()
+            },
+            body: JSON.stringify({
+                opportunity: {
+                    title: internshipData.title,
+                    company: internshipData.company,
+                    location: internshipData.location,
+                    category: internshipData.category,
+                    experience_level: 'Intern',
+                    salary_range: internshipData.stipend,
+                    required_skills: internshipData.skills_required,
+                    internship_links: [{
+                        url: internshipData.url,
+                        platform: internshipData.platform,
+                        title: internshipData.title
+                    }]
+                }
+            })
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            showNotification('Internship saved successfully!', 'success');
+            
+            // Update button state
+            if (buttonElement) {
+                buttonElement.innerHTML = '<i class="fas fa-check me-1"></i>Saved';
+                buttonElement.disabled = true;
+                buttonElement.classList.remove('btn-outline-primary');
+                buttonElement.classList.add('btn-success');
+            }
+        } else {
+            showNotification('Failed to save internship: ' + result.error, 'error');
+        }
+    } catch (error) {
+        console.error('Error saving internship:', error);
+        showNotification('Error saving internship. Please try again.', 'error');
+    }
+}
+
+function showNotification(message, type = 'info') {
+    const toastHtml = `
+        <div class="toast align-items-center text-bg-${type === 'success' ? 'success' : 'danger'} border-0" role="alert">
+            <div class="d-flex">
+                <div class="toast-body">
+                    <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-triangle'} me-2"></i>
+                    ${message}
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+            </div>
+        </div>
+    `;
+    
+    const toastContainer = document.getElementById('toastContainer');
+    toastContainer.insertAdjacentHTML('beforeend', toastHtml);
+    
+    const toastElement = toastContainer.lastElementChild;
+    const toast = new bootstrap.Toast(toastElement);
+    toast.show();
+    
+    toastElement.addEventListener('hidden.bs.toast', function() {
+        this.remove();
+    });
+}
+
+function getCSRFToken() {
+    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]');
+    return csrfToken ? csrfToken.value : '';
+}
+</script>
+{% endblock %}

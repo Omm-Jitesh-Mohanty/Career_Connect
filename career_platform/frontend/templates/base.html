@@ -1,0 +1,743 @@
+<!-- frontend/templates/base.html -->
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}BPUT Career Connect - AI Powered Platform{% endblock %}</title>
+    
+    <!-- Advanced CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="{% static 'css/advanced.css' %}" rel="stylesheet">
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #10b981;
+            --accent: #f59e0b;
+            --dark: #1f2937;
+            --light: #f8fafc;
+            --odisha-orange: #FF9933;
+            --odisha-green: #138808;
+            --odisha-white: #FFFFFF;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--light);
+            margin: 0;
+            padding: 0;
+        }
+        
+        .navbar-advanced {
+            background: linear-gradient(135deg, rgba(255,255,255,0.98) 0%, rgba(248,250,252,0.98) 100%);
+            backdrop-filter: blur(20px);
+            border-bottom: 3px solid;
+            border-image: linear-gradient(90deg, var(--odisha-orange), var(--odisha-white), var(--odisha-green)) 1;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            padding: 12px 0;
+        }
+        
+        .nav-brand-advanced {
+            font-weight: 800;
+            font-size: 1.8rem;
+            background: linear-gradient(135deg, var(--odisha-orange), var(--odisha-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            position: relative;
+        }
+        
+        .nav-brand-advanced::after {
+            content: 'ଓଡ଼ିଶା';
+            position: absolute;
+            bottom: -8px;
+            right: 0;
+            font-size: 0.6rem;
+            background: linear-gradient(135deg, var(--odisha-orange), var(--odisha-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 600;
+        }
+        
+        .nav-link {
+            font-weight: 600;
+            color: var(--dark) !important;
+            margin: 0 8px;
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 8px 16px !important;
+            border-radius: 25px;
+        }
+        
+        .nav-link:hover {
+            color: var(--odisha-orange) !important;
+            background: rgba(255, 153, 51, 0.1);
+            transform: translateY(-2px);
+        }
+        
+        .nav-link.active {
+            background: linear-gradient(135deg, var(--odisha-orange), var(--odisha-green));
+            color: white !important;
+        }
+        
+        .hero-section {
+            background: linear-gradient(135deg, var(--odisha-orange) 0%, var(--odisha-green) 100%);
+            color: white;
+            padding: 120px 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cultural-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cultural-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--odisha-orange), #FFD700, var(--odisha-green));
+        }
+        
+        .cultural-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+        }
+        
+        .btn-odisha {
+            background: linear-gradient(135deg, var(--odisha-orange), var(--odisha-green));
+            color: white;
+            border: none;
+            border-radius: 25px;
+            padding: 12px 30px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-odisha::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+        
+        .btn-odisha:hover::before {
+            left: 100%;
+        }
+        
+        .btn-odisha:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(255, 153, 51, 0.3);
+            color: white;
+        }
+        
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--odisha-orange), var(--odisha-green));
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+        }
+        
+        .feature-icon i {
+            font-size: 2rem;
+            color: white;
+        }
+        
+        .skill-badge {
+            background: linear-gradient(135deg, var(--odisha-orange), var(--odisha-green));
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            margin: 5px;
+            display: inline-block;
+        }
+        
+        .progress-cultural {
+            height: 10px;
+            border-radius: 10px;
+            background: #e9ecef;
+            overflow: hidden;
+        }
+        
+        .progress-cultural .progress-bar {
+            background: linear-gradient(90deg, var(--odisha-orange), var(--odisha-green));
+            transition: width 1s ease-in-out;
+        }
+        
+        /* Traditional Pattern Background */
+        .traditional-bg {
+            background-image: 
+                radial-gradient(circle at 25% 25%, rgba(255, 153, 51, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(19, 136, 8, 0.1) 0%, transparent 50%);
+        }
+        
+        /* Floating animation */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        .floating-element {
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        /* Traditional border animation */
+        @keyframes borderGlow {
+            0%, 100% { border-color: var(--odisha-orange); }
+            50% { border-color: var(--odisha-green); }
+        }
+        
+        .traditional-glow {
+            animation: borderGlow 3s ease-in-out infinite;
+        }
+        
+        /* 3-dot menu styles */
+        .three-dot-menu {
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            color: var(--dark);
+            padding: 8px 12px;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+        
+        .three-dot-menu:hover {
+            background: rgba(255, 153, 51, 0.1);
+            color: var(--odisha-orange);
+            transform: scale(1.1);
+        }
+        
+        .language-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .language-option.active {
+            background: linear-gradient(135deg, var(--odisha-orange), var(--odisha-green));
+            color: white;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-section {
+                padding: 80px 0;
+                text-align: center;
+            }
+            
+            .nav-brand-advanced {
+                font-size: 1.5rem;
+            }
+            
+            .nav-link {
+                margin: 2px 0;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body class="traditional-bg">
+    <!-- Advanced Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-advanced fixed-top">
+        <div class="container">
+            <a class="navbar-brand nav-brand-advanced" href="{% url 'home' %}">
+                <i class="fas fa-rocket me-2"></i>BPUT Career Connect
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'home' %}">Home</a>
+                    </li>
+                    
+                    <!-- ✅ Community Posts Link -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'posts_feed' %}">
+                            <i class="fas fa-comments me-1"></i>Community
+                        </a>
+                    </li>
+                    
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'career_recommendations' %}">Career AI</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'internship_matching' %}">Internships</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'skill_development' %}">Skill Lab</a>
+                    </li>
+                    
+                    <!-- ✅ Analytics Dashboard Link -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'analytics_dashboard' %}">
+                            <i class="fas fa-chart-bar me-1"></i>Analytics
+                        </a>
+                    </li>
+                    
+                    {% if user.is_authenticated %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'dashboard' %}">
+                                <i class="fas fa-tachometer-alt me-1"></i>Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                                <i class="fas fa-user-circle me-1"></i>{{ user.username }}
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="{% url 'profile' %}">
+                                    <i class="fas fa-user-edit me-2"></i>Profile
+                                </a></li>
+                                <!-- ✅ My Posts in Dropdown -->
+                                <li><a class="dropdown-item" href="{% url 'user_posts' %}">
+                                    <i class="fas fa-comments me-2"></i>My Posts
+                                </a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item text-danger" href="{% url 'logout' %}">
+                                    <i class="fas fa-sign-out-alt me-2"></i>Logout
+                                </a></li>
+                            </ul>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'login' %}">
+                                <i class="fas fa-sign-in-alt me-1"></i>Login
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="btn btn-odisha ms-2" href="{% url 'register' %}">
+                                <i class="fas fa-rocket me-1"></i>Get Started
+                            </a>
+                        </li>
+                    {% endif %}
+                    
+                    <!-- ✅ NEW: 3-Dot Menu with Language & Help -->
+                    <li class="nav-item dropdown">
+                        <button class="nav-link three-dot-menu" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-ellipsis-v"></i>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <!-- Language Switcher -->
+                            <li><h6 class="dropdown-header">
+                                <i class="fas fa-language me-2"></i>Language
+                            </h6></li>
+                            <li>
+                                <a class="dropdown-item language-option {% if current_lang == 'en' %}active{% endif %}" href="?lang=en">
+                                    <i class="fas fa-globe me-2"></i>
+                                    <span>English</span>
+                                    {% if current_lang == 'en' %}<i class="fas fa-check ms-2"></i>{% endif %}
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item language-option {% if current_lang == 'or' %}active{% endif %}" href="?lang=or">
+                                    <i class="fas fa-language me-2"></i>
+                                    <span>ଓଡ଼ିଆ (Odia)</span>
+                                    {% if current_lang == 'or' %}<i class="fas fa-check ms-2"></i>{% endif %}
+                                </a>
+                            </li>
+                            <li><hr class="dropdown-divider"></li>
+                            
+                            <!-- Help & Support -->
+                            <li><h6 class="dropdown-header">
+                                <i class="fas fa-question-circle me-2"></i>Help & Support
+                            </h6></li>
+                            <li>
+                                <a class="dropdown-item" href="{% url 'help_page' %}">
+                                    <i class="fas fa-life-ring me-2"></i>Help Center
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="#">
+                                    <i class="fas fa-book me-2"></i>Documentation
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="#">
+                                    <i class="fas fa-video me-2"></i>Tutorials
+                                </a>
+                            </li>
+                            <li><hr class="dropdown-divider"></li>
+                            
+                            <!-- Additional Features -->
+                            <li><h6 class="dropdown-header">
+                                <i class="fas fa-cog me-2"></i>Settings
+                            </h6></li>
+                            <li>
+                                <a class="dropdown-item" href="#">
+                                    <i class="fas fa-bell me-2"></i>Notifications
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="#">
+                                    <i class="fas fa-palette me-2"></i>Themes
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="#">
+                                    <i class="fas fa-shield-alt me-2"></i>Privacy
+                                </a>
+                            </li>
+                            <li><hr class="dropdown-divider"></li>
+                            
+                            <!-- Quick Actions -->
+                            <li><h6 class="dropdown-header">
+                                <i class="fas fa-bolt me-2"></i>Quick Actions
+                            </h6></li>
+                            <li>
+                                <a class="dropdown-item" href="{% url 'ai_agent' %}">
+                                    <i class="fas fa-robot me-2"></i>AI Assistant
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="{% url 'career_recommendations' %}">
+                                    <i class="fas fa-magic me-2"></i>Quick Recommendations
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="{% url 'internship_matching' %}">
+                                    <i class="fas fa-briefcase me-2"></i>Find Internships
+                                </a>
+                            </li>
+                            <li><a class="dropdown-item" href="{% url 'universitydashboard' %}">
+                                <i class="fas fa-university me-2"></i>University Dashboard
+                            </a></li>
+                            <li><a class="dropdown-item" href="{% url 'skillforge' %}">
+                                <i class="fas fa-gamepad me-2"></i>SkillForge Games
+                            </a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Messages -->
+    {% if messages %}
+    <div class="container mt-3" style="padding-top: 80px;">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show cultural-card">
+            <div class="d-flex align-items-center">
+                <i class="fas 
+                    {% if message.tags == 'success' %}fa-check-circle text-success
+                    {% elif message.tags == 'error' %}fa-exclamation-circle text-danger
+                    {% elif message.tags == 'warning' %}fa-exclamation-triangle text-warning
+                    {% else %}fa-info-circle text-info{% endif %}
+                me-2"></i>
+                <span>{{ message }}</span>
+            </div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Main Content -->
+    <main style="padding-top: 80px;">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Advanced Footer -->
+    <footer class="bg-dark text-white py-5 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4">
+                    <h4 class="fw-bold mb-3">BPUT Career Connect</h4>
+                    <p class="text-light">Odisha's most advanced AI-powered career platform for students.</p>
+                    <div class="social-links">
+                        <a href="#" class="text-white me-3"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="text-white me-3"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-white me-3"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" class="text-white"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-2 mb-4">
+                    <h6 class="fw-bold">Platform</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="{% url 'posts_feed' %}" class="text-light text-decoration-none">Community</a></li>
+                        <li><a href="{% url 'career_recommendations' %}" class="text-light text-decoration-none">Career AI</a></li>
+                        <li><a href="{% url 'internship_matching' %}" class="text-light text-decoration-none">Internship Match</a></li>
+                        <li><a href="{% url 'skill_development' %}" class="text-light text-decoration-none">Skill Lab</a></li>
+                        <li><a href="{% url 'analytics_dashboard' %}" class="text-light text-decoration-none">Analytics</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 mb-4">
+                    <h6 class="fw-bold">Support</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-light text-decoration-none">Help Center</a></li>
+                        <li><a href="#" class="text-light text-decoration-none">Contact Us</a></li>
+                        <li><a href="#" class="text-light text-decoration-none">Privacy Policy</a></li>
+                        <li><a href="#" class="text-light text-decoration-none">Terms of Service</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 mb-4">
+                    <h6 class="fw-bold">Contact</h6>
+                    <p class="text-light mb-1">
+                        <i class="fas fa-map-marker-alt me-2"></i>BPUT, Odisha
+                    </p>
+                    <p class="text-light mb-1">
+                        <i class="fas fa-phone me-2"></i>+91 XXXXX XXXXX
+                    </p>
+                    <p class="text-light mb-0">
+                        <i class="fas fa-envelope me-2"></i>career@bput.ac.in
+                    </p>
+                </div>
+            </div>
+            <hr class="my-4">
+            <div class="text-center">
+                <p class="mb-0 text-light">&copy; 2024 BPUT Career Connect. All rights reserved.</p>
+                <p class="mb-0 text-light">ଓଡ଼ିଶାର ଭବିଷ୍ୟତକୁ ସଶକ୍ତ କରିବା - Empowering Odisha's Future</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    
+    <script>
+        // Simple JavaScript for interactions
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add animation to cultural cards on scroll
+            const animateOnScroll = () => {
+                const elements = document.querySelectorAll('.cultural-card');
+                elements.forEach(element => {
+                    const position = element.getBoundingClientRect().top;
+                    const screenPosition = window.innerHeight / 1.3;
+                    
+                    if (position < screenPosition) {
+                        element.style.opacity = '1';
+                        element.style.transform = 'translateY(0)';
+                    }
+                });
+            };
+            
+            // Set initial state
+            document.querySelectorAll('.cultural-card').forEach(card => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(30px)';
+                card.style.transition = 'all 0.6s ease';
+            });
+            
+            window.addEventListener('scroll', animateOnScroll);
+            animateOnScroll(); // Initial check
+            
+            // Smooth scrolling for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+            
+            // Add active class to current page nav link
+            const currentUrl = window.location.pathname;
+            document.querySelectorAll('.nav-link').forEach(link => {
+                if (link.getAttribute('href') === currentUrl) {
+                    link.classList.add('active');
+                }
+            });
+            
+            // Auto-translate content when language changes
+            const urlParams = new URLSearchParams(window.location.search);
+            const lang = urlParams.get('lang');
+            
+            if (lang === 'or') {
+                translateContentToOdia();
+            }
+        });
+
+        // Simple content translation for demo
+        function translateContentToOdia() {
+            const translations = {
+                'Home': 'ମୁଖ୍ୟପୃଷ୍ଠା',
+                'Community': 'ସମ୍ପ୍ରଦାୟ',
+                'Career AI': 'କ୍ୟାରିଅର AI',
+                'Internships': 'ଇଣ୍ଟର୍ନସିପ୍',
+                'Skill Lab': 'ଦକ୍ଷତା ଲ୍ୟାବ୍',
+                'Analytics': 'ବିଶ୍ଲେଷଣ',
+                'Dashboard': 'ଡ୍ୟାସବୋର୍ଡ୍',
+                'Profile': 'ପ୍ରୋଫାଇଲ୍',
+                'Logout': 'ଲଗଆଉଟ୍',
+                'Login': 'ଲଗଇନ୍',
+                'Get Started': 'ଆରମ୍ଭ କରନ୍ତୁ',
+                'My Posts': 'ମୋର ପୋଷ୍ଟଗୁଡିକ',
+                'Help Center': 'ସହାୟତା କେନ୍ଦ୍ର',
+                'Documentation': 'ଡକୁମେଣ୍ଟେସନ୍',
+                'Tutorials': 'ଟ୍ୟୁଟୋରିଆଲ୍',
+                'Notifications': 'ବିଜ୍ଞପ୍ତି',
+                'Themes': 'ଥିମ୍',
+                'Privacy': 'ଗୋପନୀୟତା',
+                'AI Assistant': 'AI ସହାୟକ',
+                'Quick Recommendations': 'ଦ୍ରୁତ ସୁପାରିଶ',
+                'Find Internships': 'ଇଣ୍ଟର୍ନସିପ୍ ଖୋଜନ୍ତୁ',
+                'Language': 'ଭାଷା',
+                'Help & Support': 'ସହାୟତା ଏବଂ ସମର୍ଥନ',
+                'Settings': 'ସେଟିଂସ୍',
+                'Quick Actions': 'ଦ୍ରୁତ କାର୍ଯ୍ୟ',
+                'English': 'ଇଂରାଜୀ',
+                'Odia': 'ଓଡ଼ିଆ'
+            };
+
+            // Translate navigation and dropdown content
+            document.querySelectorAll('.nav-link, .dropdown-item, .dropdown-header').forEach(element => {
+                const text = element.textContent.trim();
+                if (translations[text]) {
+                    element.textContent = translations[text];
+                }
+                
+                // Also check for partial matches
+                Object.keys(translations).forEach(english => {
+                    if (element.textContent.includes(english)) {
+                        element.textContent = element.textContent.replace(english, translations[english]);
+                    }
+                });
+            });
+
+            // Translate footer content
+            document.querySelectorAll('footer .text-light').forEach(element => {
+                const text = element.textContent.trim();
+                if (translations[text]) {
+                    element.textContent = translations[text];
+                }
+            });
+        }
+    </script>
+    
+    {% block extra_scripts %}{% endblock %}
+
+<!-- AI Agent Floating Button -->
+<div id="aiAgentContainer">
+    <a href="{% url 'ai_agent' %}" id="aiAgentButton" class="ai-agent-btn">
+        <div class="agent-avatar">
+            <i class="fas fa-robot"></i>
+        </div>
+        <span class="pulse-animation"></span>
+        <div class="agent-tooltip">CareerPal AI</div>
+    </a>
+</div>
+
+<style>
+/* AI AGENT BUTTON STYLES - ISOLATED */
+.ai-agent-btn {
+    position: fixed !important;
+    bottom: 30px !important;
+    right: 30px !important;
+    width: 70px !important;
+    height: 70px !important;
+    background: linear-gradient(135deg, var(--odisha-orange), var(--odisha-green)) !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    cursor: pointer !important;
+    box-shadow: 0 8px 25px rgba(255, 153, 51, 0.4) !important;
+    z-index: 10000 !important;
+    transition: all 0.3s ease !important;
+    border: 3px solid white !important;
+    animation: pulse-glow 2s infinite !important;
+    text-decoration: none !important;
+}
+
+.ai-agent-btn:hover {
+    transform: scale(1.1) !important;
+    box-shadow: 0 12px 35px rgba(255, 153, 51, 0.6) !important;
+    animation: none !important;
+    text-decoration: none !important;
+}
+
+.agent-avatar {
+    color: white !important;
+    font-size: 24px !important;
+}
+
+.pulse-animation {
+    position: absolute !important;
+    width: 100% !important;
+    height: 100% !important;
+    border-radius: 50% !important;
+    background: rgba(255, 153, 51, 0.4) !important;
+    animation: pulse 2s infinite !important;
+}
+
+.agent-tooltip {
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-10px);
+    background: #1f2937;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+    opacity: 0;
+    transition: all 0.3s ease;
+    pointer-events: none;
+}
+
+.agent-tooltip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 5px solid transparent;
+    border-top-color: #1f2937;
+}
+
+.ai-agent-btn:hover .agent-tooltip {
+    opacity: 1;
+    transform: translateX(-50%) translateY(-15px);
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); opacity: 1; }
+    100% { transform: scale(1.5); opacity: 0; }
+}
+
+@keyframes pulse-glow {
+    0% { box-shadow: 0 0 0 0 rgba(255, 153, 51, 0.7); }
+    70% { box-shadow: 0 0 0 10px rgba(255, 153, 51, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(255, 153, 51, 0); }
+}
+</style>
+</body>
+</html>

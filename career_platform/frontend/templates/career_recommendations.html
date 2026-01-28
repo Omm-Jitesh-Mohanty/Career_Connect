@@ -1,0 +1,617 @@
+<!-- frontend/templates/career_recommendations.html -->
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="cultural-card p-4">
+                <h2 class="text-center mb-3">AI Career Recommendations</h2>
+                <p class="text-center text-muted mb-0">
+                    Personalized job matches based on your {{ profile.branch }} profile and skills
+                </p>
+                
+                <!-- Overall Readiness Score -->
+                {% if overall_readiness %}
+                <div class="row mt-3">
+                    <div class="col-md-6 offset-md-3">
+                        <div class="card bg-light">
+                            <div class="card-body text-center py-3">
+                                <h5 class="mb-2">Your Career Readiness</h5>
+                                <div class="display-4 text-primary mb-1">{{ overall_readiness }}%</div>
+                                <small class="text-muted">Based on your profile, skills, and match quality</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Recommendations -->
+        <div class="col-lg-8">
+            <div class="cultural-card p-4 mb-4">
+                <h4 class="mb-4">
+                    <i class="fas fa-briefcase me-2 text-primary"></i>
+                    Recommended Career Paths ({{ recommendations|length }} found)
+                </h4>
+                
+                {% if recommendations %}
+                    <div class="row" id="recommendations-container">
+                        {% for job in recommendations %}
+                        <div class="col-md-6 mb-4">
+                            <div class="card h-100 professional-card" data-job-id="{{ job.title|slugify }}">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ job.title }}</h5>
+                                    <h6 class="card-subtitle mb-2 text-primary">{{ job.company }}</h6>
+                                    <p class="card-text text-muted small">
+                                        <i class="fas fa-map-marker-alt me-1"></i>{{ job.location }}
+                                    </p>
+                                    
+                                    <!-- Compatibility Score -->
+                                    <div class="mb-3">
+                                        <div class="d-flex justify-content-between align-items-center mb-1">
+                                            <small class="text-muted">Match Score</small>
+                                            <small class="fw-bold text-primary">{{ job.compatibility_score }}%</small>
+                                        </div>
+                                        <div class="progress" style="height: 8px;">
+                                            <div class="progress-bar bg-success" 
+                                                 style="width: {{ job.compatibility_score }}%"></div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Job Details -->
+                                    <div class="mb-3">
+                                        <p class="mb-1"><strong>Salary:</strong> {{ job.salary_range }}</p>
+                                        <p class="mb-1"><strong>Experience:</strong> {{ job.experience_level }}</p>
+                                        <p class="mb-1"><strong>Category:</strong> {{ job.category }}</p>
+                                        <p class="mb-0"><strong>Growth:</strong> 
+                                            <span class="badge bg-{% if job.growth_potential == 'Very High' %}success{% elif job.growth_potential == 'High' %}info{% else %}warning{% endif %}">
+                                                {{ job.growth_potential }}
+                                            </span>
+                                        </p>
+                                    </div>
+                                    
+                                    <!-- Skills -->
+                                    {% if job.matched_skills %}
+                                    <div class="mb-2">
+                                        <small class="text-success">
+                                            <i class="fas fa-check me-1"></i>
+                                            <strong>Your Skills:</strong>
+                                        </small>
+                                        <div class="mt-1">
+                                            {% for skill in job.matched_skills %}
+                                            <span class="badge bg-success me-1 mb-1">{{ skill }}</span>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                    {% endif %}
+                                    
+                                    {% if job.missing_skills %}
+                                    <div class="mb-3">
+                                        <small class="text-warning">
+                                            <i class="fas fa-exclamation-triangle me-1"></i>
+                                            <strong>Learn These:</strong>
+                                        </small>
+                                        <div class="mt-1">
+                                            {% for skill in job.missing_skills %}
+                                            <span class="badge bg-warning text-dark me-1 mb-1">{{ skill }}</span>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                    {% endif %}
+
+                                    <!-- Quick Action Buttons -->
+                                    <div class="d-grid gap-2">
+                                        <a href="{% url 'career_roadmap' job.title|slugify %}" class="btn btn-primary btn-sm">
+                                            <i class="fas fa-road me-1"></i>View Career Roadmap
+                                        </a>
+                                        <button class="btn btn-outline-primary btn-sm save-opportunity-btn" 
+                                                data-job='{{ job|safe }}'
+                                                data-job-id="{{ job.title|slugify }}">
+                                            <i class="fas fa-bookmark me-1"></i>Save Opportunity
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="text-center py-4">
+                        <i class="fas fa-search fa-3x text-muted mb-3"></i>
+                        <h5>No recommendations found</h5>
+                        <p class="text-muted">Complete your profile to get personalized career recommendations.</p>
+                        <a href="{% url 'profile' %}" class="btn btn-primary">Update Profile</a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        
+        <!-- Skill Development Plan -->
+        <div class="col-lg-4">
+            <div class="cultural-card p-4 mb-4">
+                <h4 class="mb-4">
+                    <i class="fas fa-chart-line me-2 text-warning"></i>
+                    Skill Development Plan
+                </h4>
+                
+                <div id="skillDevelopmentContent">
+                    <!-- This will be loaded via AJAX -->
+                    <div class="text-center py-3">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading skill analysis...</span>
+                        </div>
+                        <p class="text-muted mt-2">Analyzing your skill gaps...</p>
+                    </div>
+                </div>
+                
+                <!-- Quick Actions -->
+                <div class="quick-actions mt-4">
+                    <h6 class="text-muted mb-3">Quick Actions</h6>
+                    <div class="d-grid gap-2">
+                        <a href="{% url 'profile' %}" class="btn btn-outline-primary btn-sm">
+                            <i class="fas fa-user-edit me-1"></i>Update Profile
+                        </a>
+                        <a href="/ai-engine/skill-development/" class="btn btn-outline-success btn-sm">
+                            <i class="fas fa-graduation-cap me-1"></i>Skill Development
+                        </a>
+                        <a href="/ai-engine/internship-matching/" class="btn btn-outline-info btn-sm">
+                            <i class="fas fa-briefcase me-1"></i>Find Internships
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Profile Summary -->
+            {% if profile %}
+            <div class="cultural-card p-4">
+                <h6 class="text-muted mb-3">Your Profile Summary</h6>
+                <div class="profile-stats">
+                    <div class="stat-item mb-2">
+                        <small class="text-muted">CGPA:</small>
+                        <strong class="float-end">{{ profile.cgpa }}</strong>
+                    </div>
+                    <div class="stat-item mb-2">
+                        <small class="text-muted">Branch:</small>
+                        <strong class="float-end">{{ profile.branch }}</strong>
+                    </div>
+                    <div class="stat-item mb-2">
+                        <small class="text-muted">Skills:</small>
+                        <strong class="float-end">
+                            {% with profile.skills|default:"" as skills_str %}
+                                {% with skills_list=skills_str.split %}
+                                    {{ skills_list|length }}
+                                {% endwith %}
+                            {% endwith %}
+                        </strong>
+                    </div>
+                    <div class="stat-item">
+                        <small class="text-muted">Semester:</small>
+                        <strong class="float-end">{{ profile.semester }}</strong>
+                    </div>
+                </div>
+                
+                <!-- Skills Preview -->
+                <div class="mt-3">
+                    <small class="text-muted">Your Top Skills:</small>
+                    <div class="mt-1">
+                        {% with profile.skills|default:"" as skills_str %}
+                            {% with skills_list=skills_str.split %}
+                                {% for skill in skills_list|slice:":8" %}
+                                <span class="badge bg-primary me-1 mb-1">{{ skill }}</span>
+                                {% endfor %}
+                                {% if skills_list|length > 8 %}
+                                <span class="badge bg-secondary">+{{ skills_list|length|add:"-8" }} more</span>
+                                {% endif %}
+                            {% endwith %}
+                        {% endwith %}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- Toast Container for Notifications -->
+<div id="toastContainer" class="toast-container position-fixed top-0 end-0 p-3"></div>
+
+<style>
+.professional-card {
+    transition: all 0.3s ease;
+    border: 1px solid #e0e0e0;
+}
+
+.professional-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+.skill-gap-card {
+    background: #f8f9fa;
+    border-left: 4px solid #ffc107 !important;
+}
+
+.stat-item {
+    border-bottom: 1px solid #f0f0f0;
+    padding-bottom: 8px;
+}
+
+.stat-item:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.btn-saved {
+    background-color: #198754;
+    border-color: #198754;
+    color: white;
+}
+
+.progress {
+    background-color: #e9ecef;
+}
+
+.progress-bar {
+    transition: width 0.6s ease;
+}
+
+.priority-critical {
+    border-left: 4px solid #dc3545 !important;
+}
+
+.priority-high {
+    border-left: 4px solid #fd7e14 !important;
+}
+
+.priority-medium {
+    border-left: 4px solid #ffc107 !important;
+}
+</style>
+
+<script>
+// Wait for DOM to be fully loaded
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Career recommendations page loaded');
+    console.log('Total recommendations:', {{ recommendations|length }});
+    
+    // Load skill development data
+    loadSkillDevelopmentData();
+    
+    // Add event listeners to all View Details buttons
+    document.querySelectorAll('.view-details-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            const jobData = JSON.parse(this.dataset.job);
+            console.log('View details clicked for:', jobData.title);
+            showJobDetails(jobData);
+        });
+    });
+    
+    // Add event listeners to all Save Opportunity buttons
+    document.querySelectorAll('.save-opportunity-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            const jobData = JSON.parse(this.dataset.job);
+            const jobId = this.dataset.jobId;
+            console.log('Save opportunity clicked for:', jobData.title);
+            saveOpportunity(jobData, jobId, this);
+        });
+    });
+});
+
+// Load skill development data via AJAX
+async function loadSkillDevelopmentData() {
+    try {
+        console.log('Loading skill development data...');
+        
+        const response = await fetch('/ai-engine/skill-development/', {
+            method: 'GET',
+            headers: {
+                'X-CSRFToken': getCSRFToken(),
+                'Content-Type': 'application/json'
+            }
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            displaySkillDevelopmentPlan(data);
+        } else {
+            showFallbackSkillPlan(data.error);
+        }
+    } catch (error) {
+        console.error('Error loading skill development data:', error);
+        showFallbackSkillPlan('Failed to load skill analysis');
+    }
+}
+
+function displaySkillDevelopmentPlan(data) {
+    const container = document.getElementById('skillDevelopmentContent');
+    const skillAnalysis = data.skill_analysis;
+    
+    if (!skillAnalysis.skill_gaps || skillAnalysis.skill_gaps.length === 0) {
+        container.innerHTML = `
+            <div class="text-center py-3">
+                <i class="fas fa-check-circle fa-2x text-success mb-2"></i>
+                <h6 class="text-success">Strong Skills Foundation!</h6>
+                <p class="text-muted mb-3">You have the key skills for your recommended career paths.</p>
+                
+                <!-- Suggested Advanced Learning -->
+                <div class="text-start">
+                    <h6 class="text-muted mb-2">Consider Advanced Topics:</h6>
+                    <ul class="list-unstyled small">
+                        <li><i class="fas fa-arrow-right text-primary me-2"></i>Advanced Machine Learning</li>
+                        <li><i class="fas fa-arrow-right text-primary me-2"></i>Cloud Architecture</li>
+                        <li><i class="fas fa-arrow-right text-primary me-2"></i>System Design</li>
+                        <li><i class="fas fa-arrow-right text-primary me-2"></i>Leadership Skills</li>
+                    </ul>
+                </div>
+            </div>
+        `;
+        return;
+    }
+    
+    let html = `
+        <div class="alert alert-info mb-3">
+            <h6 class="alert-heading">Skill Gap Analysis</h6>
+            <p class="mb-1">We found <strong>${skillAnalysis.total_gaps} skill gaps</strong> 
+            (${skillAnalysis.high_priority_gaps} high priority)</p>
+            <small class="text-muted">${skillAnalysis.analysis_based_on || 'Based on market demand and your career recommendations'}</small>
+        </div>
+    `;
+    
+    skillAnalysis.skill_gaps.forEach((gap, index) => {
+        const priorityClass = gap.priority === 'Critical' ? 'priority-critical' : 
+                            gap.priority === 'High' ? 'priority-high' : 'priority-medium';
+        
+        html += `
+            <div class="card mb-3 ${priorityClass}">
+                <div class="card-header py-2">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h6 class="mb-0">${gap.skill}</h6>
+                        <span class="badge ${gap.priority === 'Critical' ? 'bg-danger' : 
+                                          gap.priority === 'High' ? 'bg-warning' : 'bg-info'}">
+                            ${gap.priority} Priority
+                        </span>
+                    </div>
+                </div>
+                <div class="card-body py-3">
+                    <p class="card-text small mb-2">
+                        <i class="fas fa-chart-line me-1 text-primary"></i>
+                        ${gap.market_demand}
+                    </p>
+                    
+                    <p class="card-text small mb-2 text-muted">
+                        <i class="fas fa-info-circle me-1"></i>
+                        ${gap.reason}
+                    </p>
+                    
+                    <h6 class="small text-muted mb-2">Learning Path:</h6>
+                    <ol class="small mb-3">
+                        ${gap.learning_path.map(step => `<li>${step}</li>`).join('')}
+                    </ol>
+                    
+                    <h6 class="small text-muted mb-2">Recommended Resources:</h6>
+                    <div class="mb-3">
+                        ${gap.resources.map(resource => `
+                            <div class="d-flex justify-content-between align-items-center mb-2 p-2 bg-light rounded">
+                                <div>
+                                    <strong class="small">${resource.name}</strong><br>
+                                    <small class="text-muted">${resource.platform} • 
+                                    ${resource.free ? 'Free' : 'Paid'}</small>
+                                </div>
+                                <a href="${resource.url || '#'}" target="_blank" 
+                                   class="btn btn-sm btn-outline-primary">
+                                    <i class="fas fa-external-link-alt"></i>
+                                </a>
+                            </div>
+                        `).join('')}
+                    </div>
+                    
+                    <h6 class="small text-muted mb-2">Practice Projects:</h6>
+                    <ul class="small mb-2">
+                        ${gap.projects.map(project => `<li>${project}</li>`).join('')}
+                    </ul>
+                    
+                    <div class="mt-2">
+                        <small class="text-muted">
+                            <i class="fas fa-clock me-1"></i> Estimated: ${gap.duration}
+                        </small>
+                    </div>
+                </div>
+            </div>
+        `;
+    });
+    
+    container.innerHTML = html;
+}
+
+function showFallbackSkillPlan(error) {
+    const container = document.getElementById('skillDevelopmentContent');
+    container.innerHTML = `
+        <div class="alert alert-warning">
+            <h6 class="alert-heading">Skill Development Resources</h6>
+            <p class="mb-2">${error || 'While we analyze your specific skill gaps, here are recommended learning paths:'}</p>
+            <ul class="mb-1">
+                <li><a href="https://coursera.org/specializations/python" target="_blank">Python Programming Course</a></li>
+                <li><a href="https://freecodecamp.org" target="_blank">Web Development Bootcamp</a></li>
+                <li><a href="https://coursera.org/specializations/machine-learning" target="_blank">Data Science Fundamentals</a></li>
+            </ul>
+        </div>
+    `;
+}
+
+// Show job details in modal
+function showJobDetails(jobData) {
+    console.log('Showing details for:', jobData);
+    
+    // Create modal HTML
+    const modalHtml = `
+        <div class="modal fade" id="jobDetailsModal" tabindex="-1" aria-labelledby="jobDetailsModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="jobDetailsModalLabel">${jobData.title}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6 class="text-primary">${jobData.company}</h6>
+                                <p><i class="fas fa-map-marker-alt me-2"></i><strong>Location:</strong> ${jobData.location}</p>
+                                <p><i class="fas fa-money-bill-wave me-2"></i><strong>Salary:</strong> ${jobData.salary_range}</p>
+                                <p><i class="fas fa-user-graduate me-2"></i><strong>Experience:</strong> ${jobData.experience_level}</p>
+                            </div>
+                            <div class="col-md-6">
+                                <p><i class="fas fa-tag me-2"></i><strong>Category:</strong> ${jobData.category}</p>
+                                <p><i class="fas fa-briefcase me-2"></i><strong>Job Type:</strong> ${jobData.job_type}</p>
+                                <p><i class="fas fa-chart-line me-2"></i><strong>Growth:</strong> <span class="badge bg-success">${jobData.growth_potential}</span></p>
+                                <p><i class="fas fa-percentage me-2"></i><strong>Match Score:</strong> <span class="badge bg-primary">${jobData.compatibility_score}%</span></p>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4">
+                            <h6><i class="fas fa-tasks me-2"></i>Job Description</h6>
+                            <p class="text-muted">${jobData.description || 'No description available'}</p>
+                        </div>
+                        
+                        <div class="row mt-4">
+                            <div class="col-md-6">
+                                <h6><i class="fas fa-check-circle text-success me-2"></i>Your Matched Skills</h6>
+                                <div class="mt-2">
+                                    ${(jobData.matched_skills || []).map(skill => 
+                                        `<span class="badge bg-success me-1 mb-2">${skill}</span>`
+                                    ).join('')}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <h6><i class="fas fa-exclamation-triangle text-warning me-2"></i>Skills to Develop</h6>
+                                <div class="mt-2">
+                                    ${(jobData.missing_skills || []).map(skill => 
+                                        `<span class="badge bg-warning text-dark me-1 mb-2">${skill}</span>`
+                                    ).join('')}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" onclick="saveOpportunityFromModal('${jobData.title.replace(/'/g, "\\'")}')">
+                            <i class="fas fa-bookmark me-1"></i>Save Opportunity
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    // Remove existing modal if any
+    const existingModal = document.getElementById('jobDetailsModal');
+    if (existingModal) {
+        existingModal.remove();
+    }
+    
+    // Add modal to page
+    document.body.insertAdjacentHTML('beforeend', modalHtml);
+    
+    // Show modal
+    const modal = new bootstrap.Modal(document.getElementById('jobDetailsModal'));
+    modal.show();
+    
+    // Clean up modal after hide
+    document.getElementById('jobDetailsModal').addEventListener('hidden.bs.modal', function() {
+        this.remove();
+    });
+}
+
+// Save opportunity function
+async function saveOpportunity(jobData, jobId, buttonElement) {
+    try {
+        console.log('Saving opportunity:', jobData.title);
+        
+        const response = await fetch('/ai-engine/save-opportunity/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCSRFToken()
+            },
+            body: JSON.stringify({
+                opportunity: jobData
+            })
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            showNotification('Opportunity saved successfully!', 'success');
+            
+            // Update button state
+            if (buttonElement) {
+                buttonElement.innerHTML = '<i class="fas fa-check me-1"></i>Saved';
+                buttonElement.disabled = true;
+                buttonElement.classList.remove('btn-outline-primary');
+                buttonElement.classList.add('btn-saved');
+            }
+        } else {
+            showNotification('Failed to save opportunity: ' + result.error, 'error');
+        }
+    } catch (error) {
+        console.error('Error saving opportunity:', error);
+        showNotification('Error saving opportunity. Please try again.', 'error');
+    }
+}
+
+// Save from modal
+function saveOpportunityFromModal(jobTitle) {
+    const jobId = jobTitle.replace(/\s+/g, '-').toLowerCase();
+    const button = document.querySelector(`[data-job-id="${jobId}"]`);
+    if (button) {
+        const jobData = JSON.parse(button.dataset.job);
+        saveOpportunity(jobData, jobId, button);
+    }
+    
+    // Close modal
+    const modal = bootstrap.Modal.getInstance(document.getElementById('jobDetailsModal'));
+    if (modal) {
+        modal.hide();
+    }
+}
+
+// Show notification
+function showNotification(message, type = 'info') {
+    const toastHtml = `
+        <div class="toast align-items-center text-bg-${type === 'success' ? 'success' : 'danger'} border-0" role="alert">
+            <div class="d-flex">
+                <div class="toast-body">
+                    <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-triangle'} me-2"></i>
+                    ${message}
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+            </div>
+        </div>
+    `;
+    
+    const toastContainer = document.getElementById('toastContainer');
+    toastContainer.insertAdjacentHTML('beforeend', toastHtml);
+    
+    const toastElement = toastContainer.lastElementChild;
+    const toast = new bootstrap.Toast(toastElement);
+    toast.show();
+    
+    // Remove toast after hide
+    toastElement.addEventListener('hidden.bs.toast', function() {
+        this.remove();
+    });
+}
+
+// Get CSRF token
+function getCSRFToken() {
+    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]');
+    return csrfToken ? csrfToken.value : '';
+}
+</script>
+{% endblock %}

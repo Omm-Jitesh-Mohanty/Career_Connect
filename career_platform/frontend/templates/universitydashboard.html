@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BPUT Employability Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --light-color: #ecf0f1;
+            --success-color: #27ae60;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+        
+        .dashboard-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 1.5rem 0;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .card {
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border: none;
+            margin-bottom: 20px;
+            transition: transform 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .card-header {
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 10px 10px 0 0 !important;
+            font-weight: 600;
+        }
+        
+        .metric-card {
+            text-align: center;
+            padding: 15px;
+        }
+        
+        .metric-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--secondary-color);
+        }
+        
+        .metric-label {
+            font-size: 0.9rem;
+            color: #6c757d;
+        }
+        
+        .filter-section {
+            background-color: white;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        
+        .nav-tabs .nav-link.active {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+        }
+        
+        .nav-tabs .nav-link {
+            color: var(--primary-color);
+        }
+        
+        .export-btn {
+            background-color: var(--success-color);
+            border: none;
+            border-radius: 5px;
+            padding: 8px 15px;
+            color: white;
+            font-weight: 500;
+        }
+        
+        .chart-container {
+            position: relative;
+            height: 300px;
+            width: 100%;
+        }
+        
+        .insight-box {
+            background-color: #e8f4fc;
+            border-left: 4px solid var(--secondary-color);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 5px 5px 0;
+        }
+        
+        .scenario-controls {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .scenario-btn {
+            margin: 5px;
+        }
+        
+        footer {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 20px 0;
+            margin-top: 30px;
+        }
+        
+        .comparison-table {
+            font-size: 0.9rem;
+        }
+        
+        .trend-indicator {
+            font-weight: bold;
+        }
+        
+        .trend-up {
+            color: var(--success-color);
+        }
+        
+        .trend-down {
+            color: var(--accent-color);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="dashboard-header">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <h1>BPUT Employability Dashboard</h1>
+                    <p class="mb-0">Analytics for Colleges & Placement Cell</p>
+                </div>
+                <div class="col-md-6 text-end">
+                    <button class="btn btn-light me-2">Admin Panel</button>
+                    <button class="btn btn-outline-light">Help</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container mt-4">
+        <!-- Filters -->
+        <div class="filter-section">
+            <div class="row">
+                <div class="col-md-3">
+                    <label for="yearSelect" class="form-label">Academic Year</label>
+                    <select class="form-select" id="yearSelect">
+                        <option selected>2022-2023</option>
+                        <option>2021-2022</option>
+                        <option>2020-2021</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label for="departmentSelect" class="form-label">Department</label>
+                    <select class="form-select" id="departmentSelect">
+                        <option selected>All Departments</option>
+                        <option>Computer Science</option>
+                        <option>Electrical Engineering</option>
+                        <option>Mechanical Engineering</option>
+                        <option>Civil Engineering</option>
+                        <option>Electronics & Communication</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label for="districtSelect" class="form-label">District</label>
+                    <select class="form-select" id="districtSelect">
+                        <option selected>All Districts</option>
+                        <option>Khordha</option>
+                        <option>Cuttack</option>
+                        <option>Puri</option>
+                        <option>Baleswar</option>
+                        <option>Sambalpur</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label for="industrySelect" class="form-label">Industry</label>
+                    <select class="form-select" id="industrySelect">
+                        <option selected>All Industries</option>
+                        <option>IT Services</option>
+                        <option>Core Engineering</option>
+                        <option>Manufacturing</option>
+                        <option>Consulting</option>
+                        <option>Finance</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Key Metrics -->
+        <div class="row">
+            <div class="col-md-3">
+                <div class="card metric-card">
+                    <div class="metric-value">78%</div>
+                    <div class="metric-label">Overall Placement Rate</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card metric-card">
+                    <div class="metric-value">1,250</div>
+                    <div class="metric-label">Students Placed</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card metric-card">
+                    <div class="metric-value">95</div>
+                    <div class="metric-label">Recruiting Companies</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card metric-card">
+                    <div class="metric-value">₹6.8 LPA</div>
+                    <div class="metric-label">Average Package</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scenario Controls -->
+        <div class="scenario-controls">
+            <h5>Placement Rate Analysis Scenarios</h5>
+            <div class="d-flex flex-wrap">
+                <button class="btn btn-outline-primary scenario-btn active" onclick="changeScenario('overall')">Overall Placement</button>
+                <button class="btn btn-outline-primary scenario-btn" onclick="changeScenario('gender')">Gender-wise</button>
+                <button class="btn btn-outline-primary scenario-btn" onclick="changeScenario('district')">District-wise</button>
+                <button class="btn btn-outline-primary scenario-btn" onclick="changeScenario('package')">Package-wise</button>
+                <button class="btn btn-outline-primary scenario-btn" onclick="changeScenario('industry')">Industry-wise</button>
+                <button class="btn btn-outline-primary scenario-btn" onclick="changeScenario('skills')">Skills Impact</button>
+            </div>
+        </div>
+
+        <!-- Navigation Tabs -->
+        <ul class="nav nav-tabs mt-4" id="dashboardTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="skillgap-tab" data-bs-toggle="tab" data-bs-target="#skillgap" type="button" role="tab">Skill Gap Analysis</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="placement-tab" data-bs-toggle="tab" data-bs-target="#placement" type="button" role="tab">Placement Trends</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="industry-tab" data-bs-toggle="tab" data-bs-target="#industry" type="button" role="tab">Industry Demand</button>
+            </li>
+        </ul>
+
+        <!-- Tab Content -->
+        <div class="tab-content mt-3" id="dashboardTabsContent">
+            <!-- Skill Gap Analysis Tab -->
+            <div class="tab-pane fade show active" id="skillgap" role="tabpanel">
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="card">
+                            <div class="card-header">Skill Gap Analysis by Department</div>
+                            <div class="card-body">
+                                <div class="chart-container">
+                                    <canvas id="skillGapChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-header">Top Skill Deficiencies</div>
+                            <div class="card-body">
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        Communication Skills
+                                        <span class="badge bg-danger rounded-pill">42%</span>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        Problem Solving
+                                        <span class="badge bg-warning rounded-pill">35%</span>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        Technical Aptitude
+                                        <span class="badge bg-warning rounded-pill">28%</span>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        Domain Knowledge
+                                        <span class="badge bg-info rounded-pill">22%</span>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        Teamwork
+                                        <span class="badge bg-info rounded-pill">18%</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="insight-box">
+                            <h6>Key Insight</h6>
+                            <p>Communication skills remain the most significant gap across all departments. Consider implementing soft skills training programs.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-12 text-end">
+                        <button class="export-btn">Export Skill Gap Report</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Placement Trends Tab -->
+            <div class="tab-pane fade" id="placement" role="tabpanel">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header" id="placementChartTitle">Placement Rate by Branch</div>
+                            <div class="card-body">
+                                <div class="chart-container">
+                                    <canvas id="placementByBranchChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header" id="comparisonChartTitle">Placement Trends Comparison</div>
+                            <div class="card-body">
+                                <div class="chart-container">
+                                    <canvas id="placementComparisonChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header">Placement Rate Analysis</div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-striped comparison-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Category</th>
+                                                <th>Placement Rate</th>
+                                                <th>Previous Year</th>
+                                                <th>Change</th>
+                                                <th>Trend</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="placementComparisonTable">
+                                            <!-- Dynamic content will be inserted here -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-12 text-end">
+                        <button class="export-btn">Export Placement Trends Report</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Industry Demand Tab -->
+            <div class="tab-pane fade" id="industry" role="tabpanel">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">Industry-wise Placement Distribution</div>
+                            <div class="card-body">
+                                <div class="chart-container">
+                                    <canvas id="industryDistributionChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">Industry Demand Forecast</div>
+                            <div class="card-body">
+                                <div class="chart-container">
+                                    <canvas id="industryForecastChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header">Top Skills in Demand by Industry</div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Industry</th>
+                                                <th>Top Required Skills</th>
+                                                <th>Growth Trend</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>IT Services</td>
+                                                <td>Cloud Computing, AI/ML, Cybersecurity</td>
+                                                <td><span class="text-success">↑ High</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Core Engineering</td>
+                                                <td>CAD/CAM, Project Management, IoT</td>
+                                                <td><span class="text-warning">→ Moderate</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Manufacturing</td>
+                                                <td>Automation, Supply Chain, Quality Control</td>
+                                                <td><span class="text-success">↑ High</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Consulting</td>
+                                                <td>Data Analysis, Strategic Planning, Communication</td>
+                                                <td><span class="text-warning">→ Moderate</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Finance</td>
+                                                <td>Financial Modeling, Risk Management, Blockchain</td>
+                                                <td><span class="text-danger">↓ Low</span></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-12 text-end">
+                        <button class="export-btn">Export Industry Demand Report</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>BPUT Placement Cell</h5>
+                    <p>Analytics Dashboard for Employability Enhancement</p>
+                </div>
+                <div class="col-md-6 text-end">
+                    <p>For technical support: placement@bput.ac.in</p>
+                    <p>© 2023 BPUT. All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Data for different scenarios
+        const scenarioData = {
+            overall: {
+                title: "Placement Rate by Branch",
+                labels: ['Computer Science', 'Electrical Eng', 'Mechanical Eng', 'Civil Eng', 'Electronics & Comm', 'Others'],
+                data: [85, 72, 68, 65, 78, 60],
+                comparisonLabels: ['Overall University', 'Top Department', 'Lowest Department'],
+                comparisonData: [78, 85, 60],
+                tableData: [
+                    { category: 'Overall University', rate: '78%', previous: '75%', change: '+3%', trend: 'up' },
+                    { category: 'Computer Science', rate: '85%', previous: '82%', change: '+3%', trend: 'up' },
+                    { category: 'Electrical Engineering', rate: '72%', previous: '70%', change: '+2%', trend: 'up' },
+                    { category: 'Mechanical Engineering', rate: '68%', previous: '65%', change: '+3%', trend: 'up' },
+                    { category: 'Civil Engineering', rate: '65%', previous: '68%', change: '-3%', trend: 'down' }
+                ]
+            },
+            gender: {
+                title: "Placement Rate by Gender",
+                labels: ['Male', 'Female', 'Other'],
+                data: [76, 82, 70],
+                comparisonLabels: ['Male', 'Female', 'Other'],
+                comparisonData: [76, 82, 70],
+                tableData: [
+                    { category: 'Male Students', rate: '76%', previous: '74%', change: '+2%', trend: 'up' },
+                    { category: 'Female Students', rate: '82%', previous: '79%', change: '+3%', trend: 'up' },
+                    { category: 'Other', rate: '70%', previous: '68%', change: '+2%', trend: 'up' }
+                ]
+            },
+            district: {
+                title: "Placement Rate by District",
+                labels: ['Khordha', 'Cuttack', 'Puri', 'Baleswar', 'Sambalpur', 'Other Districts'],
+                data: [82, 75, 68, 72, 65, 58],
+                comparisonLabels: ['Top District', 'Average', 'Lowest District'],
+                comparisonData: [82, 70, 58],
+                tableData: [
+                    { category: 'Khordha District', rate: '82%', previous: '78%', change: '+4%', trend: 'up' },
+                    { category: 'Cuttack District', rate: '75%', previous: '77%', change: '-2%', trend: 'down' },
+                    { category: 'Puri District', rate: '68%', previous: '65%', change: '+3%', trend: 'up' },
+                    { category: 'Baleswar District', rate: '72%', previous: '70%', change: '+2%', trend: 'up' },
+                    { category: 'Sambalpur District', rate: '65%', previous: '62%', change: '+3%', trend: 'up' }
+                ]
+            },
+            package: {
+                title: "Placement Rate by Package Range",
+                labels: ['< 4 LPA', '4-6 LPA', '6-8 LPA', '8-10 LPA', '> 10 LPA'],
+                data: [90, 85, 75, 60, 45],
+                comparisonLabels: ['< 4 LPA', '4-6 LPA', '> 6 LPA'],
+                comparisonData: [90, 85, 60],
+                tableData: [
+                    { category: 'Below 4 LPA', rate: '90%', previous: '88%', change: '+2%', trend: 'up' },
+                    { category: '4-6 LPA', rate: '85%', previous: '83%', change: '+2%', trend: 'up' },
+                    { category: '6-8 LPA', rate: '75%', previous: '72%', change: '+3%', trend: 'up' },
+                    { category: '8-10 LPA', rate: '60%', previous: '58%', change: '+2%', trend: 'up' },
+                    { category: 'Above 10 LPA', rate: '45%', previous: '42%', change: '+3%', trend: 'up' }
+                ]
+            },
+            industry: {
+                title: "Placement Rate by Industry",
+                labels: ['IT Services', 'Core Engineering', 'Manufacturing', 'Consulting', 'Finance', 'Others'],
+                data: [80, 70, 65, 75, 60, 55],
+                comparisonLabels: ['IT Services', 'Core Engineering', 'Manufacturing'],
+                comparisonData: [80, 70, 65],
+                tableData: [
+                    { category: 'IT Services', rate: '80%', previous: '76%', change: '+4%', trend: 'up' },
+                    { category: 'Core Engineering', rate: '70%', previous: '72%', change: '-2%', trend: 'down' },
+                    { category: 'Manufacturing', rate: '65%', previous: '63%', change: '+2%', trend: 'up' },
+                    { category: 'Consulting', rate: '75%', previous: '71%', change: '+4%', trend: 'up' },
+                    { category: 'Finance', rate: '60%', previous: '58%', change: '+2%', trend: 'up' }
+                ]
+            },
+            skills: {
+                title: "Placement Rate by Skill Level",
+                labels: ['High Skills', 'Medium Skills', 'Basic Skills', 'Skill Gap'],
+                data: [92, 75, 50, 30],
+                comparisonLabels: ['High Skills', 'Medium Skills', 'Basic Skills'],
+                comparisonData: [92, 75, 50],
+                tableData: [
+                    { category: 'High Skill Proficiency', rate: '92%', previous: '90%', change: '+2%', trend: 'up' },
+                    { category: 'Medium Skill Proficiency', rate: '75%', previous: '73%', change: '+2%', trend: 'up' },
+                    { category: 'Basic Skill Proficiency', rate: '50%', previous: '48%', change: '+2%', trend: 'up' },
+                    { category: 'Significant Skill Gap', rate: '30%', previous: '25%', change: '+5%', trend: 'up' }
+                ]
+            }
+        };
+
+        // Chart instances
+        let placementByBranchChart, placementComparisonChart;
+
+        // Initialize charts after the page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize placement charts
+            initPlacementCharts();
+            
+            // Initialize other charts
+            initSkillGapChart();
+            initIndustryCharts();
+            
+            // Populate initial comparison table
+            updateComparisonTable('overall');
+        });
+
+        function initPlacementCharts() {
+            const placementCtx = document.getElementById('placementByBranchChart').getContext('2d');
+            placementByBranchChart = new Chart(placementCtx, {
+                type: 'bar',
+                data: {
+                    labels: scenarioData.overall.labels,
+                    datasets: [{
+                        label: 'Placement Rate (%)',
+                        data: scenarioData.overall.data,
+                        backgroundColor: 'rgba(52, 152, 219, 0.7)',
+                        borderColor: 'rgba(52, 152, 219, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            title: {
+                                display: true,
+                                text: 'Placement Rate (%)'
+                            }
+                        }
+                    }
+                }
+            });
+
+            const comparisonCtx = document.getElementById('placementComparisonChart').getContext('2d');
+            placementComparisonChart = new Chart(comparisonCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: scenarioData.overall.comparisonLabels,
+                    datasets: [{
+                        data: scenarioData.overall.comparisonData,
+                        backgroundColor: [
+                            'rgba(52, 152, 219, 0.8)',
+                            'rgba(46, 204, 113, 0.8)',
+                            'rgba(241, 196, 15, 0.8)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                        }
+                    }
+                }
+            });
+        }
+
+        function initSkillGapChart() {
+            const skillGapCtx = document.getElementById('skillGapChart').getContext('2d');
+            new Chart(skillGapCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Computer Science', 'Electrical Eng', 'Mechanical Eng', 'Civil Eng', 'Electronics & Comm'],
+                    datasets: [{
+                        label: 'Industry Required Skills (%)',
+                        data: [85, 70, 65, 60, 75],
+                        backgroundColor: 'rgba(52, 152, 219, 0.7)',
+                        borderColor: 'rgba(52, 152, 219, 1)',
+                        borderWidth: 1
+                    }, {
+                        label: 'Student Proficiency (%)',
+                        data: [65, 50, 45, 40, 55],
+                        backgroundColor: 'rgba(231, 76, 60, 0.7)',
+                        borderColor: 'rgba(231, 76, 60, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            title: {
+                                display: true,
+                                text: 'Percentage (%)'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function initIndustryCharts() {
+            const industryDistributionCtx = document.getElementById('industryDistributionChart').getContext('2d');
+            new Chart(industryDistributionCtx, {
+                type: 'pie',
+                data: {
+                    labels: ['IT Services', 'Core Engineering', 'Manufacturing', 'Consulting', 'Finance', 'Others'],
+                    datasets: [{
+                        data: [45, 20, 15, 10, 5, 5],
+                        backgroundColor: [
+                            'rgba(52, 152, 219, 0.8)',
+                            'rgba(155, 89, 182, 0.8)',
+                            'rgba(46, 204, 113, 0.8)',
+                            'rgba(241, 196, 15, 0.8)',
+                            'rgba(230, 126, 34, 0.8)',
+                            'rgba(149, 165, 166, 0.8)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                        }
+                    }
+                }
+            });
+
+            const industryForecastCtx = document.getElementById('industryForecastChart').getContext('2d');
+            new Chart(industryForecastCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['IT Services', 'Core Engineering', 'Manufacturing', 'Consulting', 'Finance'],
+                    datasets: [{
+                        label: 'Current Demand',
+                        data: [45, 20, 15, 10, 5],
+                        backgroundColor: 'rgba(52, 152, 219, 0.7)',
+                        borderColor: 'rgba(52, 152, 219, 1)',
+                        borderWidth: 1
+                    }, {
+                        label: 'Forecasted Demand (2024)',
+                        data: [52, 22, 18, 11, 4],
+                        backgroundColor: 'rgba(46, 204, 113, 0.7)',
+                        borderColor: 'rgba(46, 204, 113, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Percentage of Total Placements'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Function to change scenario
+        function changeScenario(scenario) {
+            // Update active button
+            document.querySelectorAll('.scenario-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Update charts and table
+            updateChartsForScenario(scenario);
+            updateComparisonTable(scenario);
+        }
+
+        // Function to update charts based on selected scenario
+        function updateChartsForScenario(scenario) {
+            const data = scenarioData[scenario];
+            
+            // Update placement chart
+            placementByBranchChart.data.labels = data.labels;
+            placementByBranchChart.data.datasets[0].data = data.data;
+            placementByBranchChart.update();
+            
+            // Update comparison chart
+            placementComparisonChart.data.labels = data.comparisonLabels;
+            placementComparisonChart.data.datasets[0].data = data.comparisonData;
+            placementComparisonChart.update();
+            
+            // Update chart titles
+            document.getElementById('placementChartTitle').textContent = data.title;
+            document.getElementById('comparisonChartTitle').textContent = `${data.title} - Key Comparison`;
+        }
+
+        // Function to update comparison table
+        function updateComparisonTable(scenario) {
+            const data = scenarioData[scenario];
+            const tableBody = document.getElementById('placementComparisonTable');
+            
+            // Clear existing rows
+            tableBody.innerHTML = '';
+            
+            // Add new rows
+            data.tableData.forEach(item => {
+                const trendClass = item.trend === 'up' ? 'trend-up' : 'trend-down';
+                const trendIcon = item.trend === 'up' ? '↑' : '↓';
+                
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${item.category}</td>
+                    <td>${item.rate}</td>
+                    <td>${item.previous}</td>
+                    <td>${item.change}</td>
+                    <td class="trend-indicator ${trendClass}">${trendIcon} ${item.change}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        // Export button functionality
+        document.querySelectorAll('.export-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const tabName = this.closest('.tab-pane').id;
+                alert(`Exporting ${getExportName(tabName)} report...`);
+            });
+        });
+
+        function getExportName(tabId) {
+            switch(tabId) {
+                case 'skillgap': return 'Skill Gap Analysis';
+                case 'placement': return 'Placement Trends';
+                case 'industry': return 'Industry Demand';
+                default: return 'Dashboard';
+            }
+        }
+    </script>
+</body>
+</html>

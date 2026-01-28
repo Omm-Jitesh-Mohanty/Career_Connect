@@ -1,0 +1,153 @@
+<!-- frontend/templates/ml_concepts.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="cultural-card p-4">
+                <h2 class="text-center mb-3">🤖 AI/ML Concepts Used</h2>
+                <p class="text-center text-muted mb-0">
+                    Advanced Machine Learning algorithms powering your career success
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ML Concepts Overview -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="cultural-card p-4">
+                <h4 class="mb-4">🎯 Machine Learning Architecture</h4>
+                <p class="text-muted mb-4">
+                    Our platform uses multiple ML algorithms working together to provide accurate career recommendations.
+                    Each algorithm processes real datasets to deliver personalized insights.
+                </p>
+                
+                <div class="row">
+                    {% for key, concept in concepts.items %}
+                    <div class="col-lg-6 mb-4">
+                        <div class="card h-100 border-0 shadow-sm">
+                            <div class="card-header bg-primary text-white">
+                                <h5 class="mb-0">{{ concept.concept }}</h5>
+                            </div>
+                            <div class="card-body">
+                                <h6 class="text-primary">🎯 Purpose</h6>
+                                <p class="card-text">{{ concept.purpose }}</p>
+                                
+                                <h6 class="text-primary">⚡ Algorithms Used</h6>
+                                <p class="card-text">
+                                    <span class="badge bg-info text-dark">{{ concept.algorithms }}</span>
+                                </p>
+                                
+                                <h6 class="text-primary">🔧 Implementation</h6>
+                                <p class="card-text small">{{ concept.implementation }}</p>
+                                
+                                <h6 class="text-primary">📊 Dataset Used</h6>
+                                <p class="card-text small text-success">{{ concept.dataset_used }}</p>
+                                
+                                <h6 class="text-primary">📁 Code File</h6>
+                                <p class="card-text small text-muted">{{ concept.code_file }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Datasets Information -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="cultural-card p-4">
+                <h4 class="mb-4">📊 Real Datasets Used</h4>
+                
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <div class="card text-center h-100">
+                            <div class="card-body">
+                                <i class="fas fa-briefcase fa-3x text-primary mb-3"></i>
+                                <h5>LinkedIn Job Postings</h5>
+                                <p class="text-muted">2023-2024 dataset</p>
+                                <ul class="list-unstyled text-start">
+                                    <li>✓ 10,000+ job listings</li>
+                                    <li>✓ Real company data</li>
+                                    <li>✓ Skill requirements</li>
+                                    <li>✓ Salary information</li>
+                                </ul>
+                                <span class="badge bg-success">Real Market Data</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4 mb-3">
+                        <div class="card text-center h-100">
+                            <div class="card-body">
+                                <i class="fas fa-graduation-cap fa-3x text-warning mb-3"></i>
+                                <h5>Student Performance</h5>
+                                <p class="text-muted">Academic dataset</p>
+                                <ul class="list-unstyled text-start">
+                                    <li>✓ Math, Reading, Writing scores</li>
+                                    <li>✓ Skill mapping</li>
+                                    <li>✓ Branch prediction</li>
+                                    <li>✓ CGPA calculation</li>
+                                </ul>
+                                <span class="badge bg-success">Real Student Data</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4 mb-3">
+                        <div class="card text-center h-100">
+                            <div class="card-body">
+                                <i class="fas fa-database fa-3x text-info mb-3"></i>
+                                <h5>Enhanced Profiles</h5>
+                                <p class="text-muted">BPUT Student Data</p>
+                                <ul class="list-unstyled text-start">
+                                    <li>✓ Skill analysis</li>
+                                    <li>✓ Career paths</li>
+                                    <li>✓ Market alignment</li>
+                                    <li>✓ Growth tracking</li>
+                                </ul>
+                                <span class="badge bg-primary">Enhanced Data</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- How It Works -->
+    <div class="row">
+        <div class="col-12">
+            <div class="cultural-card p-4">
+                <h4 class="mb-4">🔍 How Our AI Works</h4>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <h5>Content-Based Filtering</h5>
+                        <ol>
+                            <li>Convert student skills and job requirements to TF-IDF vectors</li>
+                            <li>Calculate cosine similarity between vectors</li>
+                            <li>Rank jobs by similarity score</li>
+                            <li>Show matched and missing skills</li>
+                        </ol>
+                    </div>
+                    <div class="col-md-6">
+                        <h5>Collaborative Filtering</h5>
+                        <ol>
+                            <li>Cluster students based on CGPA and skills</li>
+                            <li>Find similar students in the same cluster</li>
+                            <li>Recommend jobs that similar students prefer</li>
+                            <li>Combine with content-based results</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
