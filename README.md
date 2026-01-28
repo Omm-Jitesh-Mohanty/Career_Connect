@@ -1,70 +1,89 @@
 # Career_Connect
 This is a project which is executing to solve problems of freshers in their upskilling and right career path finding .We are also focusing to increase employability ,reduce poverty, human resourse optimization and increase in production for economical development.Our website traces student's performances and accordingly provides upskilling resources and then accordingly provides job oppurtunity on the basis of their potential capabilities.
 
-Problem Statement:
-Thousands of students graduate every year from Biju Patnaik University of Technology (BPUT), Odisha, yet many struggle to find careers matching their true potential.
-There exists a clear gap between student skills, industry demands, and employability outcomes.
-The current placement process is mostly manual, with offline resume handling and limited tracking of skill trends.
-As a result, institutions face difficulty in evaluating readiness, identifying skill gaps, and connecting students with suitable internships or job opportunities.
+<h1>Problem Statement:</h1><br>
+<ul>
+<li>Thousands of students graduate every year from Biju Patnaik University of Technology (BPUT), Odisha, yet many struggle to find careers matching their true potential.</li>
+<li>There exists a clear gap between student skills, industry demands, and employability outcomes.</li>
+<li>The current placement process is mostly manual, with offline resume handling and limited tracking of skill trends.</li>
+<li>As a result, institutions face difficulty in evaluating readiness, identifying skill gaps, and connecting students with suitable internships or job opportunities.</li>
+</ul><br>
 
-Proposed Solution:
+<h1>Proposed Solution:</h1><br>
 We have design a social media type AI-engine / recommendation system Our facilities are:
-user profiling like professional CV/ Resume
-ML powered student Profile analysis, clustering and career recommendation
-Internship & job information by matching profile with a collected web scrapped data
-Skill gap analysis and best course recommendation for skill development
-Analytic dashboard for Students, University & Companies to aware about skill trend, Placement statistics and to find eligible candidate
-Interactive activities for Students to engage, exchange knowledge and learn with fun
-AI chatbot for career guidance and FAQs
-Pasts section to explore world and share your expresses with world
+<ul>
+<li>user profiling like professional CV/ Resume</li>
+<li>ML powered student Profile analysis, clustering and career recommendation</li>
+<li>Internship & job information by matching profile with a collected web scrapped data</li>
+<li>Skill gap analysis and best course recommendation for skill development</li>
+<li>Analytic dashboard for Students, University & Companies to aware about skill trend, Placement statistics and to find eligible candidate</li>
+<li>Interactive activities for Students to engage, exchange knowledge and learn with fun</li>
+<li>AI chatbot for career guidance and FAQs</li>
+<li>Posts section to explore world and share your expresses with world</li>
+</ul>
 Further we are going add Agentic AI capabilities to website for more automation and productivity. Also, we will make our website multimodal and multilingual for more user-friendly applications.
+<br>
 
-Feasibility:
-Technical: Built with open-source tools (Django, Python,React).
-AI Feasibility: Uses K-Means, NLP, and recommendation models.
-Data: Kaggle-based student employability datasets.
-Integration: API-ready for LinkedIn/Coursera & BPUT database.
-User: Simple dashboards for students, colleges & companies.
+<h1>Feasibility:</h1><br>
+<ul>
+<li><b>Technical:</b> Built with open-source tools (Django, Python,React).</li>
+<li><b>AI Feasibility:</b> Uses K-Means, NLP, and recommendation models.</li>
+<li><b>Data:</b> Kaggle-based student employability datasets.</li>
+<li><b>Integration:</b> API-ready for LinkedIn/Coursera & BPUT database.</li>
+<li><b>User:</b> Simple dashboards for students, colleges & companies.</li>
+</ul><br>
 
-Viability:
-Economic: Freemium/student subscription & institutional model.
-Social: Equal access to AI-driven guidance.
-Educational: Real-time skill gap tracking.
-Industrial: Companies get best-fit candidates.
-Sustainability: Cloud-ready, continuously learning models.
+<h1>Viability:</h1><br>
+<ul>
+<li><b>Economic:</b> Freemium/student subscription & institutional model.</li>
+<li><b>Social:</b> Equal access to AI-driven guidance.</li>
+<li><b>Educational:</b> Real-time skill gap tracking.</li>
+<li><b>Industrial:</b> Companies get best-fit candidates.</li>
+<li><b>Sustainability:</b> Cloud-ready, continuously learning models.</li>
+</ul><br>
 
-Challenges & Risks:
-Limited availability of authentic student and job data.
-Possible AI bias in recommendations and shortlisting.
-Integration challenges across BPUT colleges and companies.
-Data privacy and user trust concerns.
-Low initial adoption among students or institutions.
+<h1>Challenges & Risks:</h1><br>
+<ul>
+<li>Limited availability of authentic student and job data.</li>
+<li>Possible AI bias in recommendations and shortlisting.</li>
+<li>Integration challenges across BPUT colleges and companies.</li>
+<li>Data privacy and user trust concerns.</li>
+<li>Low initial adoption among students or institutions.</li>
+</ul><br>
 
-Strategies to Overcome:
-Use open & synthetic datasets; continuous data cleaning and validation.
-Apply bias detection, explainable AI, and feedbackbased retraining.
-Use modular microservices & APIs for smooth integration.
-Gamified learning, rewards, and competitions to boost engagement.
-Deploy on cloud for scalability and reliability.
-Simplified communication facilities between user and recruiters.
+<h1>Strategies to Overcome:</h1><br>
+<ul>
+<li>Use open & synthetic datasets; continuous data cleaning and validation.</li>
+<li>Apply bias detection, explainable AI, and feedbackbased retraining.</li>
+<li>Use modular microservices & APIs for smooth integration.</li>
+<li>Gamified learning, rewards, and competitions to boost engagement.</li>
+<li>Deploy on cloud for scalability and reliability.</li>
+<li>Simplified communication facilities between user and recruiters.</li>
+</ul><br>
 
-IMPACT:
-Real-time, data-driven job matching.
-Centralized employability ecosystem for BPUT.
-Supports Odisha’s “Digital & Skill Mission.”
-Improved placement ratios & industry alignment.
+<h1>Impact:</h1><br>
+<ul>
+<li>Real-time, data-driven job matching.</li>
+<li>Centralized employability ecosystem for BPUT.</li>
+<li>Supports Odisha’s “Digital & Skill Mission.”</li>
+<li>Improved placement ratios & industry alignment.</li>
+</ul><br>
 
-BENEFITS:
-Personalized career guidance for every student.
-Recruiters get quality, AI-filtered candidates.
-University-level analytics on trends & skills.
-Increases confidence and employability readiness.
+<h1>Benefits:</h1><br>
+<ul>
+<li>Personalized career guidance for every student.</li>
+<li>Recruiters get quality, AI-filtered candidates.</li>
+<li>University-level analytics on trends & skills.</li>
+<li>Increases confidence and employability readiness.</li>
+</ul><br>
 
-FUTURE SCOPE:
-Short-Term:
-Improve AI accuracy, add mentor network, integrate job APIs.
-Long-Term:
-Scale to all Odisha universities
-Add blockchain for certificate verification
-AI-based virtual career counselor.
-Build “Career Readiness Index.”
+<h1>Future Scope:</h1><br>
+<h2>Short-Term:</h2><br>
+<ul><li>Improve AI accuracy, add mentor network, integrate job APIs.</li></ul>
+<h2>Long-Term:</h2><br>
+<ul>
+<li>Scale to all Odisha universities</li>
+<li>Add blockchain for certificate verification</li>
+<li>AI-based virtual career counselor.</li>
+<li>Build “Career Readiness Index.”</li>
+</ul><br>
