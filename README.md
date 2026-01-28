@@ -87,3 +87,16 @@ Further we are going add Agentic AI capabilities to website for more automation 
 <li>AI-based virtual career counselor.</li>
 <li>Build “Career Readiness Index.”</li>
 </ul><br>
+
+<h1>Dataset Links:</h1>
+https://share.google/VKX7YJgzEoNX74aQ0
+https://www.kaggle.com/datasets/zeeshier/student-information-dataset
+https://www.kaggle.com/datasets/lastman0800/job-recomendation-dataset
+https://www.kaggle.com/datasets/breejeshdhar/career-recommendation-dataset
+https://www.kaggle.com/datasets/aljarah/xAPI-Edu-Data
+https://www.kaggle.com/datasets/tea340yashjoshi/skill-and-career-recommendation-dataset
+https://www.kaggle.com/datasets/ravindrasinghrana/job-description-dataset
+https://www.kaggle.com/datasets/larsen0966/student-performance-data-set
+https://www.kaggle.com/datasets/adilshamim8/student-performance-and-learning-style
+https://www.kaggle.com/datasets/spscientist/students-performance-in-exams
+https://www.kaggle.com/datasets/arshkon/linkedin-job-postings
